@@ -1,0 +1,11 @@
+GPS:
+
+TX0 - RX2
+RX0 - TX2
+
+SD:
+
+CS - D5
+DI - D23
+DO - D19
+CLK - D18
