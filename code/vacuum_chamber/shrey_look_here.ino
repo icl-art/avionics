@@ -2,13 +2,10 @@
 #include <Wire.h>
 #include <Adafruit_MPL3115A2.h>
 
-// Adafruit_MPL3115A2 baro = Adafruit_MPL3115A2();
+Adafruit_MPL3115A2 baro = Adafruit_MPL3115A2();
 
 const char *ssid = "Bill Gates' 5G Cancer Ray";
 const char *password = "YGF97T9BA8N";
-
-//const char* ssid = "DESKTOP-PHQVTQJ 8512";
-//const char* password = "9#9z09K2";
 
 int status = WL_IDLE_STATUS;
 IPAddress server(192, 168, 8, 104); // Server address
@@ -22,15 +19,20 @@ void setup()
     Serial.println("Attempting to connect to WPA network...");
     Serial.print("SSID: ");
     Serial.println(ssid);
+
+    while (!baro.begin()){
+      Serial.println("Couldn't find sensor");
+      delay(1000);
+    }
+    
     baro.setSeaPressure(99600);
 
     status = WiFi.begin(ssid, password);
-    do
-    {
-        Serial.println("Couldn't get a wifi connection");
-        Serial.println(status);
-        delay(1000);
-    } while (status != WL_CONNECTED);
+    while(status != WL_CONNECTED){
+      Serial.println("Couldn't get a wifi connection");
+      delay(1000);
+      status = WiFi.begin(ssid, password);
+    }
 
     Serial.println("Connected to wifi");
     Serial.println("\nStarting connection...");
@@ -45,15 +47,24 @@ void setup()
 
 void loop()
 {
-    if (!baro.begin())
-    {
-        Serial.println("Couldn't find sensor");
-        return;
-    }
-
     float pascals = baro.getPressure();
     float tempC = baro.getTemperature();
+    String queryString = "pressure="+String(pascals)+"&temperature="+String(tempC);
 
-    client.printf("GET /%fAVIONICSISTHEBEST%f HTTP/1.0", pascals, tempC);
+    Serial.print(pascals);
+    Serial.println(" Pa");
+    
+        // send HTTP header
+    client.println("POST / HTTP/1.1");
+    client.println("Host: localhost");
+    client.println("Content-Length: " + String(queryString.length()));
+    client.println("Connection: close");
+    client.println(); // end HTTP header
+
+    // send HTTP body
+    client.println(queryString);
+    client.println();
+
+
     delay(1000);
 }

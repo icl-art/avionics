@@ -43,6 +43,7 @@ class S(BaseHTTPRequestHandler):
         global temperatures
         content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
         post_data = self.rfile.read(content_length).decode("utf-8") # <--- Gets the data itself
+        print(post_data)
         data = {k:float(v) for k, v in map(lambda kv: kv.split("="), post_data.split("&"))}
         try:
             t = time.time()
