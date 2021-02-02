@@ -47,12 +47,23 @@ void setup()
 
 void loop()
 {
-    float pascals = baro.getPressure();
-    float tempC = baro.getTemperature();
+  float pascals = baro.getPressure();
+  float tempC = baro.getTemperature();
+  String queryString = "pressure="+String(pascals)+"&temperature="+String(tempC);
 
-    Serial.print(pascals);
-    Serial.println(" Pa");
-    
-    client.printf("GET /%fAVIONICSISTHEBEST%f HTTP/1.0", pascals, tempC);
-    delay(1000);
+  Serial.print(pascals);
+  Serial.println(" Pa");
+  
+      // send HTTP header
+  client.println("POST / HTTP/1.1");
+  client.println("Host: localhost");
+  client.println("Content-Length: " + String(queryString.length()));
+  client.println("Connection: close");
+  client.println(); // end HTTP header
+
+  // send HTTP body
+  client.println(queryString);
+  client.println();
+  
+  delay(1000);
 }

@@ -1,0 +1,4 @@
+VIN --> right 
+GND --> 2nd from right
+D21 --> left
+D22 --> 2nd left
