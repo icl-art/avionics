@@ -51,8 +51,8 @@ void loop()
   float tempC = baro.getTemperature();
   String queryString = "pressure="+String(pascals)+"&temperature="+String(tempC);
 
-  Serial.print(pascals);
-  Serial.println(" Pa");
+  //Serial.print(pascals);
+  //Serial.println(" Pa");
   
       // send HTTP header
   client.println("POST /get HTTP/1.1");
@@ -62,8 +62,7 @@ void loop()
   client.println(); // end HTTP header
 
   // send HTTP body
-  client.println(queryString);
-  client.println();
-  
+  client.println(queryString);  
+  Serial.println(queryString);
   delay(200);
 }
