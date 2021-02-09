@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strconv"
 	"text/template"
 	"time"
 
@@ -12,7 +11,8 @@ import (
 )
 
 type data struct {
-	Time, Pressure, Temperature float64
+	Time                  float64
+	Pressure, Temperature string
 }
 
 var (
@@ -22,14 +22,8 @@ var (
 )
 
 func get(w http.ResponseWriter, r *http.Request) {
-	pressure, err := strconv.ParseFloat(r.PostFormValue("pressure"), 64)
-	if err != nil {
-		panic(err)
-	}
-	temperature, err := strconv.ParseFloat(r.PostFormValue("temperature"), 64)
-	if err != nil {
-		panic(err)
-	}
+	pressure := r.PostFormValue("pressure")
+	temperature := r.PostFormValue("temperature")
 	fmt.Println(pressure, temperature)
 	channel <- data{
 		time.Now().Sub(start).Seconds(),
