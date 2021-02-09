@@ -1,0 +1,58 @@
+<html>
+    <table id="myTable">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Pressure</th>
+            <th>Temperature</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Larry</td>
+            <td>The</td>
+            <td>Launcher</td>
+          </tr>
+        </tbody>
+      </table>
+    <script>
+        let socket = new WebSocket("ws://localhost:8080/ws");
+        socket.onopen = () => {
+            console.log("Successfully Connected");
+        };
+
+        socket.onclose = event => {
+            console.log("Socket Closed Connection: ", event);
+            socket.send("Client Closed!")
+            disable()
+        };
+
+        socket.onerror = error => {
+            console.log("Socket Error: ", error);
+        };
+
+        socket.onmessage = (msg) => {
+            var data = JSON.parse(msg.data);
+            addRow(data)
+        }
+
+        function addRow(data) {
+            var tbodyRef = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+            // Insert a row at the end of table
+            var newRow = tbodyRef.insertRow();
+    
+            // Insert a cell at the end of the row
+            var newCell = newRow.insertCell();
+            var newText = document.createTextNode(data["Time"]);
+            newCell.appendChild(newText);
+            
+            var newCell = newRow.insertCell();
+            var newText = document.createTextNode(data["Pressure"]);
+            newCell.appendChild(newText);
+
+            var newCell = newRow.insertCell();
+            var newText = document.createTextNode(data["Temperature"]);
+            newCell.appendChild(newText);
+        } 
+    </script>
+</html>
