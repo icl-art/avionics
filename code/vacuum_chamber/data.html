@@ -16,7 +16,7 @@
         </tbody>
       </table>
     <script>
-        let socket = new WebSocket("ws://localhost:8080/ws");
+        let socket = new WebSocket("ws://192.168.1.2:8080/ws");
         socket.onopen = () => {
             console.log("Successfully Connected");
         };

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 	"text/template"
 	"time"
@@ -59,8 +60,9 @@ func akshat(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	ip := os.Args[1]
 	http.HandleFunc("/", akshat)
 	http.HandleFunc("/get", recv)
 	http.HandleFunc("/ws", get)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(ip+":8080", nil)
 }
