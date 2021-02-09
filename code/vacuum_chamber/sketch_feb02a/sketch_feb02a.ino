@@ -65,5 +65,5 @@ void loop()
   client.println(queryString);
   client.println();
   
-  delay(1000);
+  delay(200);
 }
