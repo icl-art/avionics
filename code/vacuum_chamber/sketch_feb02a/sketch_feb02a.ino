@@ -64,7 +64,8 @@ void loop()
 
     // send HTTP body
     client.println(queryString);
-    client.stop()
+    Serial.println(queryString);
+    client.stop();
 
     delay(200);
 }
