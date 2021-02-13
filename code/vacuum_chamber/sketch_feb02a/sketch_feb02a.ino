@@ -54,15 +54,15 @@ void loop()
     }
     Serial.println("connected");
     // send HTTP header
-    client.println("POST / HTTP/1.1");
+    client.println("POST /get HTTP/1.1");
     client.println("Host: localhost");
-    client.println("Content-Length: " + String(queryString.length()));
     client.println("Connection: close");
     client.println(); // end HTTP header
 
     // send HTTP body
     client.println(queryString);
-    client.stop()
+    Serial.println(queryString);
+    client.stop();
 
     delay(200);
 }
