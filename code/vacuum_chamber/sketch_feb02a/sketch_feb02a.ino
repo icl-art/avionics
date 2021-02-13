@@ -54,10 +54,12 @@ void loop()
     }
     Serial.println("connected");
     // send HTTP header
-    client.println("POST / HTTP/1.1");
-    client.println("Host: localhost");
+    client.println("POST /get HTTP/1.1");
+    client.println("Host: 192.168.8.104");
+    client.println("user-agent: larryTheLauncher");
+    client.println("accept: */*");
     client.println("Content-Length: " + String(queryString.length()));
-    client.println("Connection: close");
+    client.println("content-type: application/x-www-form-urlencoded");
     client.println(); // end HTTP header
 
     // send HTTP body
