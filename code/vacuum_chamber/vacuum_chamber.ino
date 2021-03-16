@@ -8,7 +8,7 @@ const char *ssid = "Bill Gates' 5G Cancer Ray";
 const char *password = "YGF97T9BA8N";
 
 int status = WL_IDLE_STATUS;
-IPAddress server(192, 168, 8, 104); // Server address
+IPAddress server(192, 168, 8, 118); // Server address
 
 void setup()
 {
@@ -22,7 +22,7 @@ void setup()
         delay(1000);
     }
     
-    baro.setSeaPressure(99600);
+    baro.setSeaPressure(102800);
 
     status = WiFi.begin(ssid, password);
     while(status != WL_CONNECTED){

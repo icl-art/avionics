@@ -8,8 +8,6 @@ data2 = readmatrix('pnut2.csv');
 data1 = readmatrix('vactest1.csv');
 data2 = readmatrix('vactest2.csv');
 data3 = readmatrix('vactest3.csv');
-data4 = readmatrix('pnut1.csv');
-data5 = readmatrix('pnut2.csv');
 
 col1 = '#1B2CC1';
 col2 = '#C14953';
@@ -23,8 +21,6 @@ hold on
 plot(data1(:, 1), data1(:, 2), 'Color', col1, 'LineWidth', 1)
 plot(data2(:, 1), data2(:, 2), 'Color', col2, 'LineWidth', 1)
 plot(data3(:, 1), data3(:, 2), 'Color', col3, 'LineWidth', 1)
-plot(data4(:, 1), data4(:, 2), 'Color', col1, 'LineWidth', 1)
-plot(data5(:, 1), data5(:, 2), 'Color', col2, 'LineWidth', 1)
 
 title('Pressure/time plot for vacuum "chamber"')
 xlabel('time (s)')
