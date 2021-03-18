@@ -11,9 +11,9 @@ frame = im2double(frame);
 deblocknet = load('pretrainedJPEGDnCNN.mat').net;
 upscalenet = load('trainedVDSR-Epoch-100-ScaleFactors-234.mat').net;
 
-% target resolution - 4:3 aspect ratio
-target_h = 960;
-target_w = 1280;
+% target resolution - 4:3 aspect ratio, 2x orig
+target_h = 960*2;
+target_w = 1280*2;
 target_channels = 3; % rgb image
 
 % performance tracking
@@ -25,31 +25,34 @@ Iy = Iycbcr(:, :, 1);
 Icb = Iycbcr(:, :, 2);
 Icr = Iycbcr(:, :, 3);
 
-% Iy_bicubic = imresize(Iy, [target_h target_w], 'bicubic');
-% Icb_bicubic = imresize(Icb, [target_h target_w], 'bicubic');
-% Icr_bicubic = imresize(Icr, [target_h target_w], 'bicubic');
+Iy_bicubic = imresize(Iy, [target_h target_w], 'bicubic');
+Icb_bicubic = imresize(Icb, [target_h target_w], 'bicubic');
+Icr_bicubic = imresize(Icr, [target_h target_w], 'bicubic');
 
 disp('AI Magic Time');
-Iy = denoiseImage(Iy, deblocknet);
-% Iresidual = activations(upscalenet, Iy_bicubic, 41);
-Iresidual = activations(upscalenet, Iy, 41);
+
+% deblocking does not yield a visible benefit in this case
+% Iy = denoiseImage(Iy, deblocknet);
+Iresidual = activations(upscalenet, Iy_bicubic, 41);
+% Iresidual = activations(upscalenet, Iy, 41);
 disp('Voodoo Complete');
 
 Iresidual = double(Iresidual);
 
-% Isr = Iy_bicubic + Iresidual;
-Isr = Iy + Iresidual;
+Isr = Iy_bicubic + Iresidual;
+% Isr = Iy + Iresidual;
 
-% upscaled_ycbcr = cat(3, Isr, Icb_bicubic, Icr_bicubic);
-upscaled_ycbcr = cat(3, Isr, Icb, Icr);
+upscaled_ycbcr = cat(3, Isr, Icb_bicubic, Icr_bicubic);
+% upscaled_ycbcr = cat(3, Isr, Icb, Icr);
 upscaled = ycbcr2rgb(upscaled_ycbcr);
 
 toc
 
-imshow(upscaled)
-title('upscaled');
-imwrite(upscaled, 'frame1_upscaled_v2.png')
+% imshow(upscaled)
+% title('upscaled');
+imwrite(upscaled, 'matlab_x2.png')
 
+% denoising does not yield a visible benefit in this case
 % tic
 % denoisenet = denoisingNetwork('dncnn');
 % [noisyR, noisyG, noisyB] = imsplit(upscaled);
