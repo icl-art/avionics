@@ -5,8 +5,8 @@ frame = read(v, 1);
 imshow(frame)
 title('Original Frame')
 
-frame = im2double(frame);
-
+% frame = im2double(frame);
+frame = imread('Logo3.png');
 % load pretrained models
 deblocknet = load('pretrainedJPEGDnCNN.mat').net;
 upscalenet = load('trainedVDSR-Epoch-100-ScaleFactors-234.mat').net;
@@ -50,7 +50,7 @@ toc
 
 % imshow(upscaled)
 % title('upscaled');
-imwrite(upscaled, 'matlab_x2.png')
+imwrite(upscaled, 'logo_upscaled.png')
 
 % denoising does not yield a visible benefit in this case
 % tic
