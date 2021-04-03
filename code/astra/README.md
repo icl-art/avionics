@@ -9,12 +9,10 @@ This folder contains the code used for the Astra launch.
 * Pnut altitude tracking
 
 ## Lauch procedure
-1. Just before launch, run the launch script, this should provide basic diagnostics as well as start the data logger.
-
-2. If any errors are detected, postpone the launch by a few minutes until the errors disappear.
-
-3. If all is well, launch.
-
+1. Pico waits 5 minutes before starting the recording.
+2. Pico records sensor data in a ring buffer with 5 seconds of data each time.
+3. After the accelerometer magnitude is 3G, break out of the ring buffer.
+4. When flash is full, stop recording.
 
 ## Files
 
