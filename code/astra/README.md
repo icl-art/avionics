@@ -21,3 +21,12 @@ This folder contains the code used for the Astra launch.
 # serialisation.h
 This converts a vector floats into a byte array.
 Should be used when storing sensor readings into files.
+
+# sensors.h
+This file should contain all code related to reading sensors.
+* Barometer
+* Pnut
+* Accelerometer
+* Gyroscope
+* GPS
+* Temperature?
