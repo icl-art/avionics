@@ -16,3 +16,8 @@ This folder contains the code used for the Astra launch.
 3. If all is well, launch.
 
 
+## Files
+
+# serialisation.h
+This converts a vector floats into a byte array.
+Should be used when storing sensor readings into files.
