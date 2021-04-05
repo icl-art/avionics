@@ -2,8 +2,8 @@ clear
 
 calib = 102800;
 
-data1 = readmatrix('pnut1.csv');
-data2 = readmatrix('pnut2.csv');
+data1 = readmatrix('chute1.csv');
+data2 = readmatrix('chute2.csv');
 
 % data1 = readmatrix('vactest1.csv');
 % data2 = readmatrix('vactest2.csv');
@@ -46,4 +46,4 @@ lab2 = sprintf ('Altitude achieved in run 2 was %.1f ft\n', deltah2/0.3);
 outcome = {lab1, lab2};
 dim = [0.15 0.3 0.3 0.3];
 annotation('textbox', dim, 'String', outcome, 'FitBoxToText', 'off');
-exportgraphics(gcf, 'testing-16mar.png', 'Resolution', 600);
+exportgraphics(gcf, 'testing-01apr.png', 'Resolution', 600);
