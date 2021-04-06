@@ -468,7 +468,7 @@ def blink(freq):
     sleep(t)
     led.off()
     sleep(t)
-    
+        
 led = Pin(25, Pin.OUT)
 while True:
-    blink(9)
+    blink(10)
