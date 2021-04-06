@@ -1,7 +1,6 @@
-import time
 import struct
 import math
-import utime
+from utime import sleep
 from machine import I2C, Pin
 
 class MPL3115A2exception(Exception):
@@ -463,11 +462,13 @@ class MPU6050:
 
 #--------------------------
 
+def blink(freq):
+    t = 1/freq
+    led.on()
+    sleep(t)
+    led.off()
+    sleep(t)
+    
 led = Pin(25, Pin.OUT)
-timer = Timer()
-
-def blink(timer):
-    led.toggle()
-
-timer.init(freq=2.5, mode=Timer.PERIODIC, callback=blink)
-
+while True:
+    blink(9)
