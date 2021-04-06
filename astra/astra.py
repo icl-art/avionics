@@ -1,7 +1,6 @@
 import struct
 import math
-from utime import sleep
-from machine import I2C, Pin
+from machine import I2C, Pin, Timer
 
 class MPL3115A2exception(Exception):
     pass
@@ -461,14 +460,12 @@ class MPU6050:
             self.reg_writeByte(self.MPU6050_RA_FIFO_EN,0b11111000)
 
 #--------------------------
-
-def blink(freq):
-    t = 1/freq
-    led.on()
-    sleep(t)
-    led.off()
-    sleep(t)
-        
+       
 led = Pin(25, Pin.OUT)
-while True:
-    blink(10)
+tim = Timer()
+
+def tick(timer):
+    global led
+    led.toggle()
+
+tim.init(freq = 10, mode=Timer.PERIODIC, callback=tick)
