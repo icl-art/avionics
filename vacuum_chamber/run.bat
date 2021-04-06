@@ -1,4 +1,5 @@
 @echo off
+TITLE Data Logger
 
 :: get current WiFi network
 for /f "tokens=2 delims=:" %%a in ('netsh wlan show interface name="WiFi" ^| find "Profile"') do set wn=%%a
