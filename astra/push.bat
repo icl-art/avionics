@@ -13,5 +13,5 @@ IF %ERRORLEVEL% == 1 (GOTO push)
 IF %ERRORLEVEL% == 2 (GOTO start)
 
 :push
-mpfshell -o COM%portsel% -n -c "ls; put %fname% main.py; ls; exit"
+mpfshell -o COM%portsel% -n -c "ls; put %fname% main.py; mput.*\.mpy; ls; exit"
 PAUSE
