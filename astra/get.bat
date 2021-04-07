@@ -11,5 +11,5 @@ IF %ERRORLEVEL% == 1 (GOTO push)
 IF %ERRORLEVEL% == 2 (GOTO start)
 
 :get
-mpfshell -o COM%portsel% -n -c "get out.csv out.csv; exit"
+mpfshell -o COM%portsel% -n -c "ls; get out.csv; exit"
 PAUSE
