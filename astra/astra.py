@@ -1,7 +1,8 @@
 import utime
 from machine import I2C, Pin, Timer
-import MPL3115A2
-import MPU6050
+import _thread
+#import MPL3115A2
+#import MPU6050
 
 #--------------------------
        
@@ -12,27 +13,36 @@ def tick(timer):
     global led
     led.toggle()
 
-tim.init(freq = 5, mode=Timer.PERIODIC, callback=tick)
-utime.sleep(5)
+def blink(hz):
+    global tim
 
-i = 0
-#tim.init(freq = 10)
+    tim.init(freq = hz, mode=Timer.PERIODIC, callback=tick)
 
-f = open("out.csv", "w")
-f.write("T,i\n")
-start = utime.ticks_ms()
-print(start)
 
-while i < 20:
-    
-    dt = utime.ticks_diff(utime.ticks_ms(), start)
-    line = "%d,%d\n" % (dt, i)
-    print(line)
-    f.write(line)
-    i = i + 1
-    utime.sleep(1)
+def write():
+    f = open("out.csv", "w")
+    f.write("T,i\n")
+    start = utime.ticks_ms()
+    i = 0
+    while i < 10:    
+        dt = utime.ticks_diff(utime.ticks_ms(), start)
+        line = "%d,%d\n" % (dt, i)
+        print(line)
+        f.write(line)
+        i = i + 1
+        utime.sleep(1)
 
-#tim.init(freq = 5)
-#utime.sleep(5)
+    f.close()
 
-f.close()
+print("Starting thread")
+_thread.start_new_thread(write, ())
+
+print("Normal Code")
+
+j = 1
+
+while j < 20:
+    print(j)
+    blink(j)
+    utime.sleep(5)
+    j = j + 1
