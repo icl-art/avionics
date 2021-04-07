@@ -7,7 +7,7 @@ set /p portsel="Enter COM Port: "
 echo COM%portsel% selected 
 
 CHOICE /C YN /M "Continue "
-IF %ERRORLEVEL% == 1 (GOTO push)
+IF %ERRORLEVEL% == 1 (GOTO get)
 IF %ERRORLEVEL% == 2 (GOTO start)
 
 :get
