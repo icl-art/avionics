@@ -17,7 +17,7 @@ class storage:
     def write(self, readings):
         if self.buffer_size >= self.max_buffer_size:
             self.flush()
-        now = utime.ticks_diff(utime.ticks_ms() - self.clock)
+        now = utime.ticks_diff(utime.ticks_ms(), self.clock)
         print(now)
 
         for val in [now] + readings:
