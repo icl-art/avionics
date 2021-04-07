@@ -1,6 +1,8 @@
 import struct
 import math
+import utime
 from machine import I2C, Pin, Timer
+
 
 class MPL3115A2exception(Exception):
     pass
@@ -468,4 +470,23 @@ def tick(timer):
     global led
     led.toggle()
 
-tim.init(freq = 10, mode=Timer.PERIODIC, callback=tick)
+tim.init(freq = 2, mode=Timer.PERIODIC, callback=tick)
+utime.sleep(5)
+
+i = 0
+tim.init(freq = 10)
+
+f = open("out.csv", "w")
+f.write("T,i\n")
+start = utime.ticks_ms()
+
+while i < 20:
+    tim.init(freq = 2)
+    f.write("{:.4f},{:d}\n".format(utime.ticks_diff(utime.ticks_ms(), start), i))
+    i = i + 1
+    utime.sleep(1)
+
+tim.init(5)
+utime.sleep(5)
+
+f.close()
