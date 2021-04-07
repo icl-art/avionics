@@ -1,3 +1,5 @@
+#https://github.com/danjperron/pico_mpu6050_ssd1331/
+
 import struct
 import math
 import utime
