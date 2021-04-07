@@ -4,10 +4,14 @@ import _thread
 from MPL3115A2 import MPL3115A2 as mpl
 import MPU6050
 import serialisation
+from ring_buffer import RingBuffer
+from math import sqrt
 
 capture_time = 300
 capture_rate = 10
 delay = int(1000/capture_rate)
+
+# hard limit to avoid overflowing storage
 limit = capture_rate*capture_time
 samples = 0
 
@@ -52,10 +56,21 @@ while check.value():
     print("Waiting")
     utime.sleep(1)
 
+_thread.start_new_thread(get, ())
+
+buffer_size = 5 * capture_rate
+rb = RingBuffer(buffer_size)
 # initialise log file with 256 bit buffer
 log = serialisation.storage(256, "log")
 
-_thread.start_new_thread(get, ())
+magnitude = 0
+while magnitude < 30:
+    lock.acquire()
+    magnitude = sqrt(data[2]**2 + data[3]**2 + data[4]**2)
+    rb.add(data)
+    lock.release()
+
+log.write(rb)
 
 while samples < limit:
     lock.acquire()
