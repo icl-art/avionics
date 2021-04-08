@@ -13,11 +13,11 @@ mpy-cross -O[4] -march=armv7m ring_buffer.py
 ECHO Compiling Serialisation
 mpy-cross -O[4] -march=armv7m serialisation.py
 
-ECHO Compiling copy
-mpy-cross -O[4] -march=armv7m copy.py
+REM ECHO Compiling copy
+REM mpy-cross -O[4] -march=armv7m copy.py
 
-ECHO Compiling types 
-mpy-cross -O[4] -march=armv7m types.py
+REM ECHO Compiling types 
+REM mpy-cross -O[4] -march=armv7m types.py
 
 ECHO Complete
 PAUSE

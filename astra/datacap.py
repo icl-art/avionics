@@ -6,7 +6,6 @@ import MPU6050
 import serialisation
 from ring_buffer import RingBuffer
 from math import sqrt
-import copy
 
 capture_time = 30
 capture_rate = 10
@@ -65,10 +64,11 @@ def get(rest=50):
     data[8] = motion.Gyroz
     lock.release()    
 
+    print("Data updated")
     utime.sleep_ms(rest)
 
 print("Starting acquisition")
-_thread.start_new_thread(get, ())
+_thread.start_new_thread(get, (200, ))
 
 print("Starting data recording")
 # faster data checking during trigger phase
@@ -83,35 +83,36 @@ utime.sleep(2) # let modules settle, ignore initial invalid readings
 magnitude = 0
 print("Waiting for launch trigger")
 # launch accel is ~ 110 m/s^2
-delay = 1000
+
 while magnitude < 20:
     led.toggle()
+
     lock.acquire()
-    reading = copy.deepcopy(data)
+    #print("Lock acquired")
+    magnitude = sqrt(data[2]**2 + data[3]**2 + data[4]**2)
+    rb.add(data)
     lock.release()
 
-    magnitude = sqrt(reading[2]**2 + reading[3]**2 + reading[4]**2)
-    rb.add(reading)
     utime.sleep_ms(delay//2)
-    print(magnitude)
+    #print(magnitude)
 
 print("Launch detected")
 log.write(rb)
 
 while samples < limit:
     led.toggle()
+
     lock.acquire()
-    reading = copy.deepcopy(data)
+    log.write(data)
     lock.release()
 
-    log.write(data)
     samples = samples + 1
     utime.sleep_ms(delay)
 
 # post flight cleanup
 log.close()
 
-del log, rb, reading
+del log, rb
 
 while True:
     led.toggle()
