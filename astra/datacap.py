@@ -6,7 +6,7 @@ import MPU6050
 import serialisation
 from ring_buffer import RingBuffer
 from math import sqrt
-
+from copy import deepcopy
 
 capture_time = 300
 capture_rate = 10
@@ -77,7 +77,8 @@ log.write(rb)
 
 while samples < limit:
     lock.acquire()
+    reading = deepcopy(data)
+    lock.release()
     log.write(data)
-    lock.release()    
     samples = samples + 1
     utime.sleep_ms(delay)
