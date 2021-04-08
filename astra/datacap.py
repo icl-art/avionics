@@ -10,7 +10,7 @@ import copy
 
 capture_time = 30
 capture_rate = 10
-delay = int(1000/capture_rate)
+delay = 1000//capture_rate
 
 # hard limit to avoid overflowing storage
 limit = capture_rate*capture_time
@@ -76,13 +76,15 @@ buffer_size = 4 * capture_rate * 2
 rb = RingBuffer(buffer_size)
 
 # initialise log file with 256 bit buffer
-log = serialisation.storage(256, "log")
+log = serialisation.storage(256, "log.bin")
 
 utime.sleep(2) # let modules settle, ignore initial invalid readings
 
 magnitude = 0
+print("Waiting for launch trigger")
 # launch accel is ~ 110 m/s^2
-while magnitude < 50:
+delay = 1000
+while magnitude < 20:
     led.toggle()
     lock.acquire()
     reading = copy.deepcopy(data)
@@ -91,7 +93,9 @@ while magnitude < 50:
     magnitude = sqrt(reading[2]**2 + reading[3]**2 + reading[4]**2)
     rb.add(reading)
     utime.sleep_ms(delay//2)
+    print(magnitude)
 
+print("Launch detected")
 log.write(rb)
 
 while samples < limit:

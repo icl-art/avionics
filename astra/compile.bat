@@ -14,7 +14,10 @@ ECHO Compiling Serialisation
 mpy-cross -O[4] -march=armv7m serialisation.py
 
 ECHO Compiling copy
-mpy-cross -O[4] -march=armv7m copy.py 
+mpy-cross -O[4] -march=armv7m copy.py
+
+ECHO Compiling types 
+mpy-cross -O[4] -march=armv7m types.py
 
 ECHO Complete
 PAUSE

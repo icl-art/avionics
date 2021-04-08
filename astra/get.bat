@@ -11,5 +11,5 @@ IF %ERRORLEVEL% == 1 (GOTO get)
 IF %ERRORLEVEL% == 2 (GOTO start)
 
 :get
-mpfshell -o COM%portsel% -n -c "ls; get out.csv; exit"
+mpfshell -o COM%portsel% -n -c "ls; get log.bin; exit"
 PAUSE
