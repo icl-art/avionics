@@ -6,9 +6,9 @@ import MPU6050
 import serialisation
 from ring_buffer import RingBuffer
 from math import sqrt
-from copy import deepcopy
+import copy
 
-capture_time = 300
+capture_time = 30
 capture_rate = 10
 delay = int(1000/capture_rate)
 
@@ -27,9 +27,10 @@ while check.value():
     utime.sleep(1)
     led.toggle()
 
+print("Initialising Sensors")
 # initialise barometer
-baro_i2c = I2C(0, scl=Pin(17), sda=Pin(16))
-baro = mpl(baro_i2c, mode=mpl.PRESSURE)
+#baro_i2c = I2C(0, scl=Pin(17), sda=Pin(16))
+#baro = mpl(baro_i2c, mode=mpl.PRESSURE)
 
 # initialise MPU6050
 mpu = MPU6050.MPU6050(bus = 1, scl = Pin(19), sda = Pin(18))
@@ -46,30 +47,30 @@ def get(rest=50):
     global data
     global start
 
-    pressure = baro.pressure()
-    temperature = baro.temperature()
+    #pressure = baro.pressure()
+    #temperature = baro.temperature()
     motion = mpu.readData()
     dt = utime.ticks_diff(utime.ticks_ms(), start)
 
     # lock data while updating
     lock.acquire()
     data[0] = dt
-    data[1] = pressure
-    data[2] = temperature
+    #data[1] = pressure
+    #data[2] = temperature
     data[3] = motion.Gx
     data[4] = motion.Gy
     data[5] = motion.Gz
     data[6] = motion.Gyrox
     data[7] = motion.Gyroy
     data[8] = motion.Gyroz
-
     lock.release()    
 
-    led.toggle()
     utime.sleep_ms(rest)
 
+print("Starting acquisition")
 _thread.start_new_thread(get, ())
 
+print("Starting data recording")
 # faster data checking during trigger phase
 buffer_size = 4 * capture_rate * 2
 rb = RingBuffer(buffer_size)
@@ -82,19 +83,21 @@ utime.sleep(2) # let modules settle, ignore initial invalid readings
 magnitude = 0
 # launch accel is ~ 110 m/s^2
 while magnitude < 50:
+    led.toggle()
     lock.acquire()
-    reading = deepcopy(data)
+    reading = copy.deepcopy(data)
     lock.release()
 
     magnitude = sqrt(reading[2]**2 + reading[3]**2 + reading[4]**2)
     rb.add(reading)
-    utime.sleep_ms(delay/2)
+    utime.sleep_ms(delay//2)
 
 log.write(rb)
 
 while samples < limit:
+    led.toggle()
     lock.acquire()
-    reading = deepcopy(data)
+    reading = copy.deepcopy(data)
     lock.release()
 
     log.write(data)
