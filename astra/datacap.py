@@ -1,6 +1,5 @@
 import utime
-from machine import I2C, Pin
-import _thread
+from machine import I2C, Pin, Timer
 from MPL3115A2 import MPL3115A2 as mpl
 import MPU6050
 import serialisation
@@ -10,6 +9,7 @@ from math import sqrt
 capture_time = 30
 capture_rate = 10
 delay = 1000//capture_rate
+
 
 # hard limit to avoid overflowing storage
 limit = capture_rate*capture_time
@@ -27,6 +27,8 @@ while check.value():
     led.toggle()
 
 print("Initialising Sensors")
+
+datastream = Timer()
 # initialise barometer
 #baro_i2c = I2C(0, scl=Pin(17), sda=Pin(16))
 #baro = mpl(baro_i2c, mode=mpl.PRESSURE)
@@ -36,23 +38,18 @@ mpu = MPU6050.MPU6050(bus = 1, scl = Pin(19), sda = Pin(18))
 mpu.setGResolution(16)
 mpu.setGyroResolution(500)
 
-# create lock to prevent both threads accessing data together
-lock = _thread.allocate_lock()
-
 start = utime.ticks_ms()
 
-def get(rest=50):
+def get(timer):
     global led
     global data
     global start
-
+    
     #pressure = baro.pressure()
     #temperature = baro.temperature()
     motion = mpu.readData()
     dt = utime.ticks_diff(utime.ticks_ms(), start)
 
-    # lock data while updating
-    lock.acquire()
     data[0] = dt
     #data[1] = pressure
     #data[2] = temperature
@@ -61,14 +58,14 @@ def get(rest=50):
     data[5] = motion.Gz
     data[6] = motion.Gyrox
     data[7] = motion.Gyroy
-    data[8] = motion.Gyroz
-    lock.release()    
+    data[8] = motion.Gyroz       
 
-    print("Data updated")
-    utime.sleep_ms(rest)
+    #print("Data updated")
+    
 
 print("Starting acquisition")
-_thread.start_new_thread(get, (200, ))
+
+datastream.init(freq = capture_rate, mode=Timer.PERIODIC, callback = get)
 
 print("Starting data recording")
 # faster data checking during trigger phase
@@ -84,28 +81,21 @@ magnitude = 0
 print("Waiting for launch trigger")
 # launch accel is ~ 110 m/s^2
 
-while magnitude < 20:
+while magnitude < 30:
     led.toggle()
 
-    lock.acquire()
-    #print("Lock acquired")
-    magnitude = sqrt(data[2]**2 + data[3]**2 + data[4]**2)
-    rb.add(data)
-    lock.release()
+    magnitude = sqrt(data[3]**2 + data[4]**2 + data[5]**2)
+    rb.add(data)    
 
     utime.sleep_ms(delay//2)
-    #print(magnitude)
+    print(magnitude)
 
 print("Launch detected")
 log.write(rb)
 
 while samples < limit:
     led.toggle()
-
-    lock.acquire()
     log.write(data)
-    lock.release()
-
     samples = samples + 1
     utime.sleep_ms(delay)
 
