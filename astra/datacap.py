@@ -69,9 +69,11 @@ log = serialisation.storage(256, "log")
 magnitude = 0
 while magnitude < 30:
     lock.acquire()
-    magnitude = sqrt(data[2]**2 + data[3]**2 + data[4]**2)
-    rb.add(data)
+    reading = deepcopy(data)
     lock.release()
+    magnitude = sqrt(reading[2]**2 + reading[3]**2 + reading[4]**2)
+    rb.add(reading)
+    
 
 log.write(rb)
 
