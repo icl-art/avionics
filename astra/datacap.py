@@ -25,6 +25,7 @@ data = [float()]*10
 while check.value():
     print("Waiting")
     utime.sleep(1)
+    led.toggle()
 
 # initialise barometer
 baro_i2c = I2C(0, scl=Pin(17), sda=Pin(16))
@@ -69,8 +70,10 @@ def get(rest=50):
 
 _thread.start_new_thread(get, ())
 
-buffer_size = 5 * capture_rate
+# faster data checking during trigger phase
+buffer_size = 4 * capture_rate * 2
 rb = RingBuffer(buffer_size)
+
 # initialise log file with 256 bit buffer
 log = serialisation.storage(256, "log")
 
@@ -82,9 +85,10 @@ while magnitude < 50:
     lock.acquire()
     reading = deepcopy(data)
     lock.release()
+
     magnitude = sqrt(reading[2]**2 + reading[3]**2 + reading[4]**2)
     rb.add(reading)
-    
+    utime.sleep_ms(delay/2)
 
 log.write(rb)
 
@@ -92,6 +96,17 @@ while samples < limit:
     lock.acquire()
     reading = deepcopy(data)
     lock.release()
+
     log.write(data)
     samples = samples + 1
     utime.sleep_ms(delay)
+
+# post flight cleanup
+log.close()
+
+del log, rb, reading
+
+while True:
+    led.toggle()
+    utime.sleep(2)
+
