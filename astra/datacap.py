@@ -7,6 +7,7 @@ import serialisation
 from ring_buffer import RingBuffer
 from math import sqrt
 
+
 capture_time = 300
 capture_rate = 10
 delay = int(1000/capture_rate)
@@ -20,6 +21,10 @@ check = Pin(22, Pin.IN, Pin.PULL_UP)
 
 data = []
 
+while check.value():
+    print("Waiting")
+    utime.sleep(1)
+
 # initialise barometer
 baro_i2c = I2C(0, scl=Pin(17), sda=Pin(16))
 baro = mpl(baro_i2c, mode=mpl.PRESSURE)
@@ -32,29 +37,27 @@ mpu.setGyroResolution(500)
 # create lock to prevent both threads accessing data together
 lock = _thread.allocate_lock()
 
+start = utime.ticks_ms()
+
 def get(rest=50):
     global led
     global data
+    global start
 
     pressure = baro.pressure()
     temperature = baro.temperature()
     motion = mpu.readData()
+    dt = utime.ticks_diff(utime.ticks_ms(), start)
 
     # lock data while updating
     lock.acquire()
-    data = [pressure, temperature, 
+    data = [dt, pressure, temperature, 
     motion.Gx, motion.Gy, motion.Gz,
     motion.Gyrox, motion.Gyroy, motion.Gyroz]
     lock.release()    
 
     led.toggle()
     utime.sleep_ms(rest)
-
-
-
-while check.value():
-    print("Waiting")
-    utime.sleep(1)
 
 _thread.start_new_thread(get, ())
 
@@ -75,6 +78,6 @@ log.write(rb)
 while samples < limit:
     lock.acquire()
     log.write(data)
-    lock.release()
+    lock.release()    
     samples = samples + 1
     utime.sleep_ms(delay)
