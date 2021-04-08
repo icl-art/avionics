@@ -19,7 +19,8 @@ samples = 0
 led = Pin(25, Pin.OUT)
 check = Pin(22, Pin.IN, Pin.PULL_UP)
 
-data = []
+# create data array
+data = [float()]*10
 
 while check.value():
     print("Waiting")
@@ -51,9 +52,16 @@ def get(rest=50):
 
     # lock data while updating
     lock.acquire()
-    data = [dt, pressure, temperature, 
-    motion.Gx, motion.Gy, motion.Gz,
-    motion.Gyrox, motion.Gyroy, motion.Gyroz]
+    data[0] = dt
+    data[1] = pressure
+    data[2] = temperature
+    data[3] = motion.Gx
+    data[4] = motion.Gy
+    data[5] = motion.Gz
+    data[6] = motion.Gyrox
+    data[7] = motion.Gyroy
+    data[8] = motion.Gyroz
+
     lock.release()    
 
     led.toggle()
@@ -66,8 +74,11 @@ rb = RingBuffer(buffer_size)
 # initialise log file with 256 bit buffer
 log = serialisation.storage(256, "log")
 
+utime.sleep(2) # let modules settle, ignore initial invalid readings
+
 magnitude = 0
-while magnitude < 30:
+# launch accel is ~ 110 m/s^2
+while magnitude < 50:
     lock.acquire()
     reading = deepcopy(data)
     lock.release()
