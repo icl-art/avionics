@@ -24,7 +24,7 @@ class storage:
     def flush(self):
         self.file.write(self.buffer)
         self.buffer = bytearray(self.max_buffer_size)
-        print(f"Wrote {self.buffer_size} bytes")
+        #print(f"Wrote {self.buffer_size} bytes")
         self.buffer_size = 0
         
     def close(self):
