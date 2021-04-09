@@ -1,5 +1,5 @@
 import utime
-from machine import I2C, Pin, Timer
+from machine import I2C, Pin
 from MPL3115A2 import MPL3115A2 as mpl
 import MPU6050
 import serialisation
@@ -7,8 +7,9 @@ from ring_buffer import RingBuffer
 from math import sqrt
 
 capture_time = 30
-capture_rate = 10
+capture_rate = 1
 delay = 1000//capture_rate
+launch_del = delay//1
 
 
 # hard limit to avoid overflowing storage
@@ -28,7 +29,6 @@ while check.value():
 
 print("Initialising Sensors")
 
-datastream = Timer()
 # initialise barometer
 #baro_i2c = I2C(0, scl=Pin(17), sda=Pin(16))
 #baro = mpl(baro_i2c, mode=mpl.PRESSURE)
@@ -40,7 +40,7 @@ mpu.setGyroResolution(500)
 
 start = utime.ticks_ms()
 
-def get(timer):
+def get():
     global led
     global data
     global start
@@ -65,10 +65,9 @@ def get(timer):
 
 print("Starting acquisition")
 
-datastream.init(freq = capture_rate, mode=Timer.PERIODIC, callback = get)
-
 print("Starting data recording")
-# faster data checking during trigger phase
+ # create a 4 second ring buffer
+ # launch detection is at 2x the frequency
 buffer_size = 4 * capture_rate * 2
 rb = RingBuffer(buffer_size)
 
@@ -81,20 +80,22 @@ magnitude = 0
 print("Waiting for launch trigger")
 # launch accel is ~ 110 m/s^2
 
-while magnitude < 30:
+while magnitude < 15:
     led.toggle()
-
+    get()
+    #print(data)
     magnitude = sqrt(data[3]**2 + data[4]**2 + data[5]**2)
     rb.add(data)    
 
-    utime.sleep_ms(delay//2)
+    utime.sleep_ms(launch_del)
     print(magnitude)
 
 print("Launch detected")
-log.write(rb)
+log.dump(rb)
 
 while samples < limit:
     led.toggle()
+    get()
     log.write(data)
     samples = samples + 1
     utime.sleep_ms(delay)
