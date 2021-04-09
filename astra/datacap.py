@@ -1,5 +1,5 @@
 import utime
-from machine import I2C, Pin
+from machine import I2C, Pin, PWM
 from MPL3115A2 import MPL3115A2 as mpl
 import MPU6050
 import serialisation
@@ -7,9 +7,9 @@ from ring_buffer import RingBuffer
 from math import sqrt
 
 capture_time = 30
-capture_rate = 1
+capture_rate = 10
 delay = 1000//capture_rate
-launch_del = delay//1
+launch_del = delay//2
 
 
 # hard limit to avoid overflowing storage
@@ -20,7 +20,7 @@ led = Pin(25, Pin.OUT)
 check = Pin(22, Pin.IN, Pin.PULL_UP)
 
 # create data array
-data = [float()]*10
+data = [float()]*9
 
 while check.value():
     print("Waiting")
@@ -88,24 +88,42 @@ while magnitude < 15:
     rb.add(data)    
 
     utime.sleep_ms(launch_del)
-    print(magnitude)
+    #print(magnitude)
 
-print("Launch detected")
+print("Launch detected, dumping buffer")
 log.dump(rb)
+for val in rb:
+    print(val)
 
-while samples < limit:
-    led.toggle()
-    get()
-    log.write(data)
-    samples = samples + 1
-    utime.sleep_ms(delay)
+print ("Buffer dumped, recording data")
+
+# while samples < limit:
+#     led.toggle()
+#     get()
+#     log.write(data)
+#     samples = samples + 1
+#     utime.sleep_ms(delay)
 
 # post flight cleanup
+print("Data capture complete, cleaning up")
 log.close()
 
 del log, rb
 
+print("Awaiting recovery")
+
+buzzer = PWM(Pin(11))
+buzzer.duty_u16(35000)
+buzzer.freq(2250)
+lo = 900
+hi = 2650
+
 while True:
     led.toggle()
-    utime.sleep(2)
+    buzzer.duty_u16(0)
+    utime.sleep(1)
+    led.toggle()
+    buzzer.duty_u16(60000)
+    utime.sleep(1)
+    
 
