@@ -41,7 +41,6 @@ mpu.setGyroResolution(500)
 start = utime.ticks_ms()
 
 def get():
-    global led
     global data
     global start
     
@@ -95,6 +94,8 @@ log.dump(rb)
 for val in rb:
     print(val)
 
+del rb
+
 print ("Buffer dumped, recording data")
 
 # while samples < limit:
@@ -108,7 +109,7 @@ print ("Buffer dumped, recording data")
 print("Data capture complete, cleaning up")
 log.close()
 
-del log, rb
+del log
 
 print("Awaiting recovery")
 
