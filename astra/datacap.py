@@ -4,10 +4,9 @@ from MPL3115A2 import MPL3115A2 as mpl
 import MPU6050
 import serialisation
 from ring_buffer import RingBuffer
-from math import sqrt
 
-capture_time = 10
-capture_rate = 10
+capture_time = 100
+capture_rate = 20
 delay = 1000//capture_rate
 launch_del = delay//2
 
@@ -67,8 +66,8 @@ print("Starting acquisition")
 print("Starting data recording")
  # create a 4 second ring buffer
  # launch detection is at 2x the frequency
-buffer_size = 4 * capture_rate * 2
-rb = RingBuffer(buffer_size)
+buffer_size = 2 * capture_rate * 2
+rb = RingBuffer(buffer_size, 9)
 
 # initialise log file with 256 bit buffer
 log = serialisation.storage(256, "log.bin")

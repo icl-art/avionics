@@ -1,5 +1,5 @@
 #This file implements a ringbuffer that should store the readings for the first n seconds
-import utime
+
 class RingBuffer:    
 
     def __init__(self, max_size, frame_size):
@@ -9,7 +9,7 @@ class RingBuffer:
         self.i = 0
     
     def add(self, reading):
-        if self.i >= self.max_size:
+        if self.i >= self.max_size*self.frame_size:
             self.i = 0
 
         next_i = self.i + self.frame_size
@@ -19,5 +19,5 @@ class RingBuffer:
     def __iter__(self):
         for i in range(0, self.max_size*self.frame_size, self.frame_size):
             reading = self.buf[i:self.frame_size + i]
-            if sum(reading) != 0:
-                yield reading
+            #if sum(reading) != 0:
+            yield reading
