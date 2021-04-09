@@ -21,6 +21,15 @@ class storage:
             self.buffer[self.buffer_size:] = struct.pack("f", val)
             self.buffer_size += FLOAT_SIZE
 
+    def dump(self, rb):
+        if self.buffer_size >= self.max_buffer_size:
+            self.flush()
+
+        for reading in rb:
+            for val in reading:
+                self.buffer[self.buffer_size:] = struct.pack("f", val)
+                self.buffer_size += FLOAT_SIZE
+
     def flush(self):
         self.file.write(self.buffer)
         self.buffer = bytearray(self.max_buffer_size)
