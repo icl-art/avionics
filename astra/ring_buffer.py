@@ -1,11 +1,11 @@
 #This file implements a ringbuffer that should store the readings for the first n seconds
 
-class RingBuffer:
-    i = 0
+class RingBuffer:    
 
     def __init__(self, max_size):
         self.max_size = max_size
-        self.buf = [None] * self.max_size
+        self.buf = [[float()]*9] * self.max_size
+        self.i = 0
     
     def add(self, reading):
         if self.i >= self.max_size:
