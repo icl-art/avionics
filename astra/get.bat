@@ -12,4 +12,7 @@ IF %ERRORLEVEL% == 2 (GOTO start)
 
 :get
 mpfshell -o COM%portsel% -n -c "ls; get log.bin; exit"
+
+set /p ofname="Enter output filename: "
+python data_read.py -d "%cd%" -i log.bin -o %ofname% 
 PAUSE

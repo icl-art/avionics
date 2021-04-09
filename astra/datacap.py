@@ -6,7 +6,7 @@ import serialisation
 from ring_buffer import RingBuffer
 from math import sqrt
 
-capture_time = 30
+capture_time = 10
 capture_rate = 10
 delay = 1000//capture_rate
 launch_del = delay//2
@@ -30,8 +30,8 @@ while check.value():
 print("Initialising Sensors")
 
 # initialise barometer
-#baro_i2c = I2C(0, scl=Pin(17), sda=Pin(16))
-#baro = mpl(baro_i2c, mode=mpl.PRESSURE)
+baro_i2c = I2C(0, scl=Pin(17), sda=Pin(16))
+baro = mpl(baro_i2c, mode=mpl.PRESSURE)
 
 # initialise MPU6050
 mpu = MPU6050.MPU6050(bus = 1, scl = Pin(19), sda = Pin(18))
@@ -44,14 +44,14 @@ def get():
     global data
     global start
     
-    #pressure = baro.pressure()
-    #temperature = baro.temperature()
+    pressure = baro.pressure()
+    temperature = baro.temperature()
     motion = mpu.readData()
     dt = utime.ticks_diff(utime.ticks_ms(), start)
 
     data[0] = dt
-    #data[1] = pressure
-    #data[2] = temperature
+    data[1] = pressure
+    data[2] = temperature
     data[3] = motion.Gx
     data[4] = motion.Gy
     data[5] = motion.Gz
@@ -98,12 +98,12 @@ del rb
 
 print ("Buffer dumped, recording data")
 
-# while samples < limit:
-#     led.toggle()
-#     get()
-#     log.write(data)
-#     samples = samples + 1
-#     utime.sleep_ms(delay)
+while samples < limit:
+    led.toggle()
+    get()
+    log.write(data)
+    samples = samples + 1
+    utime.sleep_ms(delay)
 
 # post flight cleanup
 print("Data capture complete, cleaning up")
