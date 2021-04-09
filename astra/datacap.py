@@ -79,11 +79,11 @@ magnitude = 0
 print("Waiting for launch trigger")
 # launch accel is ~ 110 m/s^2
 
-while magnitude < 15:
+while magnitude < 225:
     led.toggle()
     get()
     #print(data)
-    magnitude = sqrt(data[3]**2 + data[4]**2 + data[5]**2)
+    magnitude = data[3]**2 + data[4]**2 + data[5]**2
     rb.add(data)    
 
     utime.sleep_ms(launch_del)
