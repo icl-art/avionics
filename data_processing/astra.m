@@ -4,7 +4,7 @@ col1 = '#2978a0';
 col2 = '#BA1200';
 col3 = '#3EC300';
 
-data = readmatrix('log.csv');
+data = readmatrix('astra.csv');
 
 t = data(:, 1);
 pressure = data(:, 2);
@@ -19,11 +19,13 @@ g_z = data(:, 9);
 t = t/1000;
 
 figure
+hold on
+plot(t, temp, 'LineWidth', 1, 'Color', col1)
 title('Temperature');
 xlabel('Time(s)');
 ylabel('Temperature (C)');
-plot(t, temp, 'LineWidth', 1, 'Color', col1)
 xlim([(min(t)-1), (max(t)+1)])
+hold off
 
 figure
 title('Acceleration');
@@ -47,8 +49,6 @@ plot(t, g_z, 'LineWidth', 1, 'Color', col3)
 legend('x', 'y', 'z')
 xlim([(min(t)-1), (max(t)+1)])
 hold off
-
-
 
 height = atmospalt(pressure);
 
