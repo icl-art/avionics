@@ -29,13 +29,18 @@ while check.value():
 print("Initialising Sensors")
 
 # initialise barometer
-baro_i2c = I2C(0, scl=Pin(17), sda=Pin(16))
+baro_i2c = I2C(0, scl=Pin(19), sda=Pin(18))
 baro = mpl(baro_i2c, mode=mpl.PRESSURE)
 
 # initialise MPU6050
-mpu = MPU6050.MPU6050(bus = 1, scl = Pin(19), sda = Pin(18))
+mpu = MPU6050.MPU6050(bus = 1, scl = Pin(17), sda = Pin(16))
 mpu.setGResolution(16)
 mpu.setGyroResolution(500)
+
+# allow time to integrate hardware
+for _ in range(50):
+    led.toggle()
+    utime.sleep(3)
 
 start = utime.ticks_ms()
 
@@ -112,18 +117,9 @@ del log
 
 print("Awaiting recovery")
 
-buzzer = PWM(Pin(11))
-buzzer.duty_u16(35000)
-buzzer.freq(2250)
-lo = 900
-hi = 2650
 
 while True:
     led.toggle()
-    buzzer.duty_u16(0)
-    utime.sleep(1)
-    led.toggle()
-    buzzer.duty_u16(60000)
     utime.sleep(1)
     
 
