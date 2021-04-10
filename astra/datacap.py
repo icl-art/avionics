@@ -6,7 +6,7 @@ import serialisation
 from ring_buffer import RingBuffer
 
 capture_time = 100
-capture_rate = 20
+capture_rate = 1
 delay = 1000//capture_rate
 launch_del = delay//2
 
@@ -34,8 +34,8 @@ baro = mpl(baro_i2c, mode=mpl.PRESSURE)
 
 # initialise MPU6050
 mpu = MPU6050.MPU6050(bus = 0, scl = Pin(17), sda = Pin(16))
-mpu.setGResolution(16)
-mpu.setGyroResolution(500)
+mpu.set_accel_range(16)
+mpu.set_gyro_range(500)
 
 start = utime.ticks_ms()
 
@@ -46,7 +46,7 @@ def get():
     try:
         pressure = baro.pressure()
         temperature = baro.temperature()
-        motion = mpu.readData()
+        motion = mpu.read()
         dt = utime.ticks_diff(utime.ticks_ms(), start)
 
         data[0] = dt
@@ -93,7 +93,7 @@ print("Waiting for launch trigger")
 while magnitude < 225:
     led.toggle()
     get()
-    #print(data)
+    print(data)
     magnitude = data[3]**2 + data[4]**2 + data[5]**2
     rb.add(data)    
 
