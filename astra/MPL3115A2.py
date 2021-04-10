@@ -1,4 +1,5 @@
 from machine import Pin
+from utime import sleep_ms
 
 class MPL3115A2exception(Exception):
     pass
@@ -78,7 +79,8 @@ class MPL3115A2:
                 MPL3115_I2CADDR, MPL3115_STATUS, self.STA_reg)
 
             if(self.STA_reg[0] == 0):
-                time.sleep(0.01)
+                #time.sleep(0.01)
+                sleep_ms(10)
                 pass
             elif(self.STA_reg[0] & 0x04) == 4:
                 return True

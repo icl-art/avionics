@@ -1,3 +1,5 @@
+#https://github.com/danjperron/pico_mpu6050_ssd1331/
+
 import struct
 import math
 import utime
@@ -292,13 +294,13 @@ class MPU6050:
     def setGyroResolution(self, value):
         #use dictionary to get correct G resolution 2,4,8 or 16G
         self.reg_writeByte(self.MPU6050_RA_GYRO_CONFIG,{250 : 0 , 500 : 8 , 1000 : 16 , 2000 : 24}[value])
-        self.GyroFactor= value/32768.0;
+        self.GyroFactor= value/32768.0
 
 
     def setGResolution(self, value):
         #use dictionary to get correct G resolution 2,4,8 or 16G
         self.reg_writeByte(self.MPU6050_RA_ACCEL_CONFIG,{2 : 0 , 4 : 8 , 8 : 16 , 16 : 24}[value])
-        self.AccelerationFactor= value/32768.0;
+        self.AccelerationFactor= value/32768.0
 
 
     def setSampleRate(self, Rate):

@@ -1,12 +1,11 @@
 #Note convert the libraries marked with "u" to micropython libraries (by adding a u)
-import time
+import utime
 import struct
 
 FLOAT_SIZE = 4
 
 class storage:
     def __init__(self, max_buffer_size, filename):
-        self.clock = time.time()
         self.max_buffer_size = max_buffer_size
         self.buffer_size = 0
         self.buffer = bytearray(max_buffer_size)
@@ -17,17 +16,24 @@ class storage:
     def write(self, readings):
         if self.buffer_size >= self.max_buffer_size:
             self.flush()
-        now = time.time() - self.clock
-        print(now)
-
-        for val in [now] + readings:
+        
+        for val in readings:
             self.buffer[self.buffer_size:] = struct.pack("f", val)
             self.buffer_size += FLOAT_SIZE
+
+    def dump(self, rb):
+        if self.buffer_size >= self.max_buffer_size:
+            self.flush()
+
+        for reading in rb:
+            for val in reading:
+                self.buffer[self.buffer_size:] = struct.pack("f", val)
+                self.buffer_size += FLOAT_SIZE
 
     def flush(self):
         self.file.write(self.buffer)
         self.buffer = bytearray(self.max_buffer_size)
-        print(f"Wrote {self.buffer_size} bytes")
+        #print(f"Wrote {self.buffer_size} bytes")
         self.buffer_size = 0
         
     def close(self):
