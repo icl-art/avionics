@@ -29,18 +29,13 @@ while check.value():
 print("Initialising Sensors")
 
 # initialise barometer
-baro_i2c = I2C(0, scl=Pin(19), sda=Pin(18))
+baro_i2c = I2C(1, scl=Pin(19), sda=Pin(18))
 baro = mpl(baro_i2c, mode=mpl.PRESSURE)
 
 # initialise MPU6050
-mpu = MPU6050.MPU6050(bus = 1, scl = Pin(17), sda = Pin(16))
+mpu = MPU6050.MPU6050(bus = 0, scl = Pin(17), sda = Pin(16))
 mpu.setGResolution(16)
 mpu.setGyroResolution(500)
-
-# allow time to integrate hardware
-for _ in range(50):
-    led.toggle()
-    utime.sleep(3)
 
 start = utime.ticks_ms()
 
@@ -48,28 +43,40 @@ def get():
     global data
     global start
     
-    pressure = baro.pressure()
-    temperature = baro.temperature()
-    motion = mpu.readData()
-    dt = utime.ticks_diff(utime.ticks_ms(), start)
+    try:
+        pressure = baro.pressure()
+        temperature = baro.temperature()
+        motion = mpu.readData()
+        dt = utime.ticks_diff(utime.ticks_ms(), start)
 
-    data[0] = dt
-    data[1] = pressure
-    data[2] = temperature
-    data[3] = motion.Gx
-    data[4] = motion.Gy
-    data[5] = motion.Gz
-    data[6] = motion.Gyrox
-    data[7] = motion.Gyroy
-    data[8] = motion.Gyroz       
-
+        data[0] = dt
+        data[1] = pressure
+        data[2] = temperature
+        data[3] = motion.Gx
+        data[4] = motion.Gy
+        data[5] = motion.Gz
+        data[6] = motion.Gyrox
+        data[7] = motion.Gyroy
+        data[8] = motion.Gyroz       
+    except:
+        data = [float('nan')]*9
+        print("Failed to get data")
     #print("Data updated")
-    
+
+# allow time to integrate hardware, self calibration    
+print("Waiting for integration")
+for _ in range(2):
+    led.toggle()
+    get()
+    utime.sleep(3)
+
+start = utime.ticks_ms()    
 
 print("Starting acquisition")
 
 print("Starting data recording")
- # create a 4 second ring buffer
+
+ # create a 2 second ring buffer
  # launch detection is at 2x the frequency
 buffer_size = 2 * capture_rate * 2
 rb = RingBuffer(buffer_size, 9)
@@ -81,7 +88,7 @@ utime.sleep(2) # let modules settle, ignore initial invalid readings
 
 magnitude = 0
 print("Waiting for launch trigger")
-# launch accel is ~ 110 m/s^2
+# launch accel is ~ 80 m/s^2
 
 while magnitude < 225:
     led.toggle()
