@@ -65,7 +65,7 @@ def get():
 
 # allow time to integrate hardware, self calibration    
 print("Waiting for integration")
-for _ in range(2):
+for _ in range(200):
     led.toggle()
     get()
     utime.sleep(3)
@@ -90,7 +90,7 @@ magnitude = 0
 print("Waiting for launch trigger")
 # launch accel is ~ 80 m/s^2
 
-while magnitude < 2.25:
+while magnitude < 20:
     led.toggle()
     get()
     #print(data)
