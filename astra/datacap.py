@@ -6,7 +6,7 @@ import serialisation
 from ring_buffer import RingBuffer
 
 capture_time = 100
-capture_rate = 1
+capture_rate = 20
 delay = 1000//capture_rate
 launch_del = delay//2
 
@@ -90,10 +90,10 @@ magnitude = 0
 print("Waiting for launch trigger")
 # launch accel is ~ 80 m/s^2
 
-while magnitude < 225:
+while magnitude < 2.25:
     led.toggle()
     get()
-    print(data)
+    #print(data)
     magnitude = data[3]**2 + data[4]**2 + data[5]**2
     rb.add(data)    
 
@@ -123,7 +123,6 @@ log.close()
 del log
 
 print("Awaiting recovery")
-
 
 while True:
     led.toggle()

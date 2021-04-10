@@ -262,13 +262,6 @@ class MPU6050(object):
         new = (old & ~mask) | (val << shift)
         self.write_byte(reg, new)
 
-    # def read_word(self, reg):
-    #     self.bus.readfrom_mem_into(self.address, reg, self.wordbuf)
-    #     return unpack('>H', self.wordbuf)[0]
-
-    # def read_word2(self, reg):
-    #     self.bus.readfrom_mem_into(self.address, reg, self.wordbuf)
-    #     return unpack('>h', self.wordbuf)[0]
         
     def identify(self):
         val = self.read_byte(MPU6050_RA_WHO_AM_I)
