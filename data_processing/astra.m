@@ -1,14 +1,15 @@
 clear
 
+G = 9.8065;
+
 col1 = '#2978a0';
 col2 = '#BA1200';
 col3 = '#3EC300';
 col4 = '#3C153B';
 lw = 1;
+launch = 'astra_apr11';
 
-G = 9.8065;
-
-data = readmatrix('astra.csv');
+data = readmatrix(sprintf('%s.csv', launch));
 data = sortrows(data);
 
 t = data(:, 1);
@@ -34,7 +35,7 @@ plot(t, acc_magnitude, 'LineWidth', 1, 'Color', col4)
 title('Acceleration');
 xlabel('Time (s)')
 ylabel('Acceleration (m/s^2)')
-legend('x', 'y', 'z', 'Magnitude')
+legend('x', 'y', 'z', 'Magnitude', 'Location', 'best')
 xlim([(min(t)-1), (max(t)+1)])
 
 figure
@@ -45,7 +46,7 @@ plot(t, g_z, 'LineWidth', lw, 'Color', col3)
 title('Angular Velocity');
 xlabel('Time (s)')
 ylabel('Rotation (deg/s)')
-legend('x', 'y', 'z')
+legend('x', 'y', 'z', 'Location', 'best')
 xlim([(min(t)-1), (max(t)+1)])
 hold off
 
