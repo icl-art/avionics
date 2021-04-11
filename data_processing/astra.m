@@ -76,3 +76,10 @@ ylabel('Temperature (C)');
 xlim([(min(t)-1), (max(t)+1)])
 exportgraphics(gcf, sprintf('%s_temperature.png', launch), 'Resolution', 600);
 
+figure
+plot(t, 'LineWidth', lw, 'Color', col1)
+title('Data Recording')
+xlabel('Data Point');
+ylabel('Time Elapsed')
+xlim([(min(t)-1), (max(t)+1)])
+exportgraphics(gcf, sprintf('%s_recording.png', launch), 'Resolution', 600);
