@@ -5,7 +5,7 @@ import MPU6050
 import serialisation
 from ring_buffer import RingBuffer
 
-capture_time = 100
+capture_time = 120
 capture_rate = 20
 delay = 1000//capture_rate
 launch_del = delay//2
@@ -89,8 +89,8 @@ utime.sleep(2) # let modules settle, ignore initial invalid readings
 magnitude = 0
 print("Waiting for launch trigger")
 # launch accel is ~ 80 m/s^2
-
-while magnitude < 20:
+# acc reads in g
+while magnitude < 16:
     led.toggle()
     get()
     #print(data)
