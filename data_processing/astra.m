@@ -39,7 +39,8 @@ hold on
 plot(t, acc_x, 'LineWidth', 1, 'Color', col1)
 plot(t, acc_y, 'LineWidth', 1, 'Color', col2)
 plot(t, acc_z, 'LineWidth', 1, 'Color', col3)
-legend('x', 'y', 'z')
+plot(t, acc_magnitude, 'LineWidth', 1, 'Color', col4)
+legend('x', 'y', 'z', 'Magnitude')
 xlim([(min(t)-1), (max(t)+1)])
 
 figure
@@ -57,7 +58,6 @@ hold off
 height = atmospalt(pressure);
 
 figure
-hold on
 title('Pressure/Altitude Plot')
 xlabel('Time(s)')
 
