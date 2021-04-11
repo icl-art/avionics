@@ -61,7 +61,7 @@ exportgraphics(gcf, sprintf('%s_pressure.png', launch), 'Resolution', 600);
 
 height = atmospalt(pressure);
 figure
-plot(t, pressure, 'LineWidth', lw, 'Color', col1)
+plot(t, height, 'LineWidth', lw, 'Color', col1)
 title('Altitude ASL')
 xlabel('Time(s)')
 ylabel('Altitude (m)')
@@ -81,5 +81,4 @@ plot(t, 'LineWidth', lw, 'Color', col1)
 title('Data Recording')
 xlabel('Data Point');
 ylabel('Time Elapsed')
-xlim([(min(t)-1), (max(t)+1)])
 exportgraphics(gcf, sprintf('%s_recording.png', launch), 'Resolution', 600);
