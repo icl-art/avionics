@@ -3,15 +3,16 @@ clear
 col1 = '#2978a0';
 col2 = '#BA1200';
 col3 = '#3EC300';
+G = 9.8065;
 
 data = readmatrix('astra.csv');
 
 t = data(:, 1);
 pressure = data(:, 2);
 temp = data(:, 3);
-acc_x = data(:, 4);
-acc_y = data(:, 5);
-acc_z = data(:, 6);
+acc_x = data(:, 4)*G;
+acc_y = data(:, 5)*G;
+acc_z = data(:, 6)*G;
 g_x = data(:, 7);
 g_y = data(:, 8);
 g_z = data(:, 9);

@@ -34,8 +34,8 @@ baro = mpl(baro_i2c, mode=mpl.PRESSURE)
 
 # initialise MPU6050
 mpu = MPU6050.MPU6050(bus = 0, scl = Pin(17), sda = Pin(16))
-mpu.setGResolution(16)
-mpu.setGyroResolution(500)
+mpu.set_accel_range(16)
+mpu.set_gyro_range(500)
 
 start = utime.ticks_ms()
 
@@ -46,7 +46,7 @@ def get():
     try:
         pressure = baro.pressure()
         temperature = baro.temperature()
-        motion = mpu.readData()
+        motion = mpu.read()
         dt = utime.ticks_diff(utime.ticks_ms(), start)
 
         data[0] = dt
@@ -65,7 +65,7 @@ def get():
 
 # allow time to integrate hardware, self calibration    
 print("Waiting for integration")
-for _ in range(2):
+for _ in range(200):
     led.toggle()
     get()
     utime.sleep(3)
@@ -90,7 +90,7 @@ magnitude = 0
 print("Waiting for launch trigger")
 # launch accel is ~ 80 m/s^2
 
-while magnitude < 225:
+while magnitude < 20:
     led.toggle()
     get()
     #print(data)
@@ -123,7 +123,6 @@ log.close()
 del log
 
 print("Awaiting recovery")
-
 
 while True:
     led.toggle()
