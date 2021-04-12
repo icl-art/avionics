@@ -53,9 +53,9 @@ exportgraphics(gcf, sprintf('%s_rotation.png', launch), 'Resolution', 600);
 
 figure
 plot(t, pressure, 'LineWidth', lw, 'Color', col1)
-title('Pressure')
+title('Pressure - 💩📦')
 xlabel('Time(s)')
-ylabel('Pressure (Pa) - 💩📦')
+ylabel('Pressure (Pa)')
 xlim([(min(t)-1), (max(t)+1)])
 exportgraphics(gcf, sprintf('%s_pressure.png', launch), 'Resolution', 600);
 
@@ -95,7 +95,6 @@ plot(t, altitude, 'LineWidth', lw, 'Color', col1)
 title('Altitude AGL - Pnut')
 xlabel('Time(s)')
 ylabel('Altitude (m)')
-xlim([(min(t)-1), (max(t)+1)])
 exportgraphics(gcf, sprintf('%s_altitude_pnut.png', launch), 'Resolution', 600);
 
 figure
@@ -103,7 +102,6 @@ plot(t, vel, 'LineWidth', lw, 'Color', col2)
 title('Velocity - Pnut')
 xlabel('Time(s)')
 ylabel('Velocity (m/s)')
-xlim([(min(t)-1), (max(t)+1)])
 exportgraphics(gcf, sprintf('%s_velocity_pnut.png', launch), 'Resolution', 600);
 
 figure
@@ -111,5 +109,6 @@ plot(t, temp, 'LineWidth', lw, 'Color', col3)
 title('Temperature - Pnut')
 xlabel('Time(s)')
 ylabel('Velocity (m/s)')
-xlim([(min(t)-1), (max(t)+1)])
 exportgraphics(gcf, sprintf('%s_temperature_pnut.png', launch), 'Resolution', 600);
+
+
