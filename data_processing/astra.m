@@ -11,6 +11,8 @@ col4 = '#3C153B';
 lw = 1;
 launch = 'astra_apr11';
 
+load OpenRocket.mat
+
 data = readmatrix(sprintf('%s.csv', launch));
 data = sortrows(data);
 
@@ -36,11 +38,13 @@ plot(t, acc_x, 'LineWidth', lw, 'Color', col1)
 plot(t, acc_y, 'LineWidth', lw, 'Color', col2)
 plot(t, acc_z, 'LineWidth', lw, 'Color', col3)
 plot(t, acc_magnitude, 'LineWidth', 1, 'Color', col4)
+plot(time2, OR_accel, 'c-', 'LineWidth', lw)
 title('Acceleration - 💩📦');
 xlabel('Time (s)')
 ylabel('Acceleration (m/s^2)')
-legend('x', 'y', 'z', 'Magnitude', 'Location', 'best')
-xlim([0, (max(t)+1)])
+legend('x', 'y', 'z', 'Magnitude', 'OpenRocket', 'Location', 'best')
+xlim([100.7 130.7])
+ylim([-80 109])
 exportgraphics(gcf, sprintf('%s_acceleration.png', launch), 'Resolution', 600);
 
 figure
@@ -48,10 +52,11 @@ hold on
 plot(t, g_x, 'LineWidth', lw, 'Color', col1)
 plot(t, g_y, 'LineWidth', lw, 'Color', col2)
 plot(t, g_z, 'LineWidth', lw, 'Color', col3)
+plot(time2, OR_angVel, 'c-', 'LineWidth', lw)
 title('Angular Velocity - 💩📦');
 xlabel('Time (s)')
 ylabel('Rotation (deg/s)')
-legend('x', 'y', 'z', 'Location', 'best')
+legend('x', 'y', 'z', 'OpenRocket', 'Location', 'best')
 xlim([0, (max(t)+1)])
 exportgraphics(gcf, sprintf('%s_rotation.png', launch), 'Resolution', 600);
 
@@ -96,14 +101,22 @@ temp = pnut(:, 4);
 
 figure
 plot(t, altitude, 'LineWidth', lw, 'Color', col1)
+hold on
+plot(time, OR_alt, 'LineWidth', lw, 'Color', col2)
+hold off
 title('Altitude AGL - Pnut')
+legend('PNUT', 'OpenRocket', 'Location', 'best')
 xlabel('Time(s)')
 ylabel('Altitude (m)')
 exportgraphics(gcf, sprintf('%s_altitude_pnut.png', launch), 'Resolution', 600);
 
 figure
 plot(t, vel, 'LineWidth', lw, 'Color', col2)
+hold on
+plot(time, OR_vel, 'LineWidth', lw, 'Color', col3)
+hold off
 title('Velocity - Pnut')
+legend('PNUT', 'OpenRocket', 'Location', 'best')
 xlabel('Time(s)')
 ylabel('Velocity (m/s)')
 exportgraphics(gcf, sprintf('%s_velocity_pnut.png', launch), 'Resolution', 600);
