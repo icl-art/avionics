@@ -25,6 +25,8 @@ g_z = data(:, 9);
 
 % convert from ms to s
 t = t/1000;
+% shift t values to recording start
+t = t - min(t);
 
 figure
 hold on
