@@ -1,4 +1,5 @@
 clear
+close all
 
 %TEST
 
@@ -102,7 +103,7 @@ temp = pnut(:, 4);
 figure
 plot(t, altitude, 'LineWidth', lw, 'Color', col1)
 hold on
-plot(time, OR_alt, 'LineWidth', lw, 'Color', col2)
+plot(time+0.4,OR_alt, '-.', 'LineWidth', lw, 'Color', col2)
 hold off
 title('Altitude AGL - Pnut')
 legend('PNUT', 'OpenRocket', 'Location', 'best')
