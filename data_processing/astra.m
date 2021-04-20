@@ -1,5 +1,6 @@
 clear
 close all
+clc
 
 %TEST
 
@@ -110,6 +111,23 @@ legend('PNUT', 'OpenRocket', 'Location', 'best')
 xlabel('Time(s)')
 ylabel('Altitude (m)')
 exportgraphics(gcf, sprintf('%s_altitude_pnut.png', launch), 'Resolution', 600);
+
+period = 35;
+
+smooth_alt = movmean(altitude,period);
+disp(['Moving average period = ' num2str(period) ', and apogee = ' num2str(max(smooth_alt))])
+
+figure
+hold on
+plot(t, smooth_alt, 'LineWidth', lw, 'Color', col1)
+plot(time+0.4,OR_alt, '-.', 'LineWidth', lw, 'Color', col2)
+hold off
+title('Smoothed Altitude AGL - Pnut')
+legend('PNUT', 'OpenRocket', 'Location', 'best')
+xlabel('Time(s)')
+ylabel('Altitude (m)')
+box on
+exportgraphics(gcf, sprintf('%s_smoothed_altitude_pnut.png', launch), 'Resolution', 600);
 
 figure
 plot(t, vel, 'LineWidth', lw, 'Color', col2)
