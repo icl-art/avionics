@@ -115,7 +115,7 @@ exportgraphics(gcf, sprintf('%s_altitude_pnut.png', launch), 'Resolution', 600);
 period = 35;
 
 smooth_alt = movmean(altitude,period);
-disp(['Moving average period = ' num2str(period) ', and apogee = ' num2str(max(smooth_alt))])
+disp(['Moving average period = ' num2str(period) ', and apogee = ' num2str(max(smooth_alt)) ' m'])
 
 figure
 hold on
