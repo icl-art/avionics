@@ -78,13 +78,13 @@ The avionics system is a 3 state, state machine, with the following states:
 
 This system records data in the following format using 32 bit floating point numbers.
 
-    0 1          31 32         63 64         95 96                                    191 192                                   383 384
+    0 1          31 32         63 64         95 96                                    191 192                                   287 288
      +-------------+-------------+-------------+-----------------------------------------+-----------------------------------------+
      |             |             |             |           Linear Acceleration           |         Rotational Acceleration         |
      | Time offset |  Pressure   | Temperature +-------------+-------------+-------------+-------------+-------------+-------------+
      |             |             |             |      x      |       y     |      z      |      x      |       y     |      z      |
      +-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
-    0 1          31 32         63 64         95 96        127 128       159 160       191 192       223 224       255 256       383 384
+    0 1          31 32         63 64         95 96        127 128       159 160       191 192       223 224       255 256       287 288
 
 So each record uses 36 bytes, and since 20 records are taken per second, 720 bytes are needed to record 1 second of flight.
 The simulated flight takes 120 seconds, which means that 86,400 bytes are used for the flight, which is significantly lower than 2MB.
