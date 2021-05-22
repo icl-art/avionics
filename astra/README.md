@@ -1,38 +1,127 @@
-#Astra
+# <ins>Astra</ins>
 
-This folder contains the code used for the Astra launch.
+---
 
-## Inventory
-* Launch initialisation
-* Data logger
-* GPS recovery
-* Pnut altitude tracking
+This document explains the design of the Astra Avionics System (AAS), as well as the associated testing and launch procedures.
 
-## Pre launch
-Flash required files using push_fast.bat. This will compile all required libraries, and push all code to the Pico on COM 3 (this can be modified). Code will be configured to run automatically on boot. Pico must be reset for code to take effect.
-If an error occurs, ensure the pico serial connection has not been captured by another program.
+### Contents
 
-## Lauch procedure
-0. Pin 22 must be shorted to ground to start logging code, to avoid accidental overwriting during data recovery.
-1. Pico waits 10 minutes before starting the recording.
-2. Pico records sensor data in a ring buffer with 5 seconds of data each time.
-3. After the accelerometer magnitude exceeds ~4.5 G, break out of the ring buffer.
-4. Once 120 seconds have elapsed, data recording is stopped. 
+1. [Design](#Schematic)
+2. [Testing](#Testing)
+3. [Launch](#Launch)
 
-## Post launch
-Run get_fast.bat. This will extract the data, run the parsing program, and plot the data in MATLAB. 
+## Schematic
 
-## Files
+Here is a basic schematic showing the overall design of the original AAS.
 
-# serialisation.h
-This converts a vector floats into a byte array.
-Should be used when storing sensor readings into files.
+                                   +---------------+ 
+                                   |    MPU6050    | 
+                                   | Accelerometer | 
+                                   +-------|-------+ 
+                                           |         
+                                           |         
+                                           |         
+         +-----------+             +-------v-------+ 
+         | MPL3115A2 |             |    RP2040     | 
+         | Altimeter -------------->     CPU       | 
+         +-----------+             +-------|-------+ 
+                                           |         
+                                           |         
+                                           |         
+                                   +-------v-------+ 
+                                   | Flash Storage | 
+                                   |      2MB      | 
+                                   +---------------+ 
 
-# sensors.h
-This file should contain all code related to reading sensors.
-* Barometer
-* Pnut
-* Accelerometer
-* Gyroscope
-* GPS
-* Temperature?
+**N.B.** The original flash size was 2MB - changed to 8MB after the first launch due to its insufficient size.
+This system takes 20 sensor readings per second, which are stored in flash storage.
+
+See [this commit](https://github.com/icl-art/avionics/commit/b56d4629c624b6bab54ca2577aa3f64e02a82ea5) for the code used in the first launch.
+
+---
+
+Here is the (tentative) schematic for the second iteration of the AAS.
+
+      +---------------+             +---------+                    
+      |  ICM-20649    |             | BMP390  |                    
+      | Accelerometer --+           |Altimeter|                    
+      | (Wide range)  | |           +----|----+                    
+      +---------------+ |                |                         
+                        |                |                         
+      +---------------+ |           +----v---+          +---------+
+      |    BNO085     --v-----------> RP2040 -----------> PAM8302 |
+      | Accelerometer |             |  CPU   |          | Speaker |
+      +---------------+             +----|---+          +---------+
+                                         |                         
+                                         |                         
+                                         |                         
+                                 +-------v-------+                 
+                                 | Flash Storage |                 
+                                 |      8MB      |                 
+                                 +---------------+                 
+
+Note: only one of the 2 accelerometers will be used.
+
+Key differences:
+
+* Either the BNO085 or ICM-20649 will replace the MPU6050
+* The BMP390 will replace the MPL3115A2
+* The PAM8302 speaker was added to assist in recovery
+
+### Code
+
+This system records data in the following format using 32 bit floating point numbers.
+
+    0 1          31 32         63 64         95 96                                    191 192                                   383 384
+     +-------------+-------------+-------------+-----------------------------------------+-----------------------------------------+
+     |             |             |             |           Linear Acceleration           |         Rotational Acceleration         |
+     | Time offset |  Pressure   | Temperature +-------------+-------------+-------------+-------------+-------------+-------------+
+     |             |             |             |      x      |       y     |      z      |      x      |       y     |      z      |
+     +-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
+    0 1          31 32         63 64         95 96        127 128       159 160       191 192       223 224       255 256       383 384
+
+So each record uses 36 bytes, and since 20 records are taken per second, 720 bytes are needed to record 1 second of flight.
+The simulated flight takes 120 seconds, which means that 86,400 bytes are used for the flight, which is significantly lower than 2MB.
+
+
+The above calculation does not factor time spent at the launch pad, and the time taken to recover the rocket, which increases the data stored significantly.
+One method of reducing the data is to trigger data recording at launch, using the accelerometer to detect launch.
+
+However, some data may not be recorded as there is time between the actual launch and launch detection. This is fixed by using a ring buffer of 10 seconds of data.
+
+---
+
+During the first launch, 2 things went wrong with this method.
+
+1. The system was programmed to only collect 120 seconds of data.
+2. The accelerometer was triggered early.
+
+Luckily it seems that the rocket launched soon after the incorrect detection, so some data was recovered.
+
+---
+
+### Performance hacks
+
+* Writing to flash is much slower than writing to RAM, so we actually store the data in a buffer in RAM, and periodically flush it to flash.
+
+* The RP2040 has Programmable IO and a DMA controller which can allow for readings to be taken asynchronously.
+
+* The RP2040 has 2 cores, so the 2nd core can be used to provide nonblocking flash writes. Since we now use 2 cores, a synchronisation method needs to be provided. Either locks or using 2 buffers. - TODO: fill this in with benchmark results.
+
+
+## Testing
+
+The following parts can be unit tested:
+
+* Ring buffer
+* Data encoding/decoding
+
+Since the rest of the system is tightly coupled with the hardware, the avionics bay will need to be tested before launch.
+
+Tests include:
+
+* It is impossible to trigger launch detection without an actual launch. This could be done by shaking the assembly.
+
+* The data collected from the sensors is accurate. This could be done by manually triggering a launch event, and moving with the avionics bay.
+
+## Launch procedures
