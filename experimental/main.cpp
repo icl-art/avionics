@@ -44,21 +44,27 @@ int main()
     gpio_init(BUTTON_PIN);
     gpio_set_dir(BUTTON_PIN, GPIO_IN);
 
-
-    blink(500, 5);
-    uint8_t random_data[FLASH_PAGE_SIZE];
-    for (int i = 0; i < FLASH_PAGE_SIZE; ++i)
-        random_data[i] = rand() >> 16;
-
-    flash_range_erase(FLASH_TARGET_OFFSET, FLASH_SECTOR_SIZE); //Erases 4096 bytes at a time
-
-    flash_range_program(FLASH_TARGET_OFFSET, random_data, FLASH_PAGE_SIZE);
-
     gpio_put(LED_PIN, 1);
     int i = 0;
     wait(28);
     uart_puts(UART_ID, "hello\r\n");
     gpio_put(LED_PIN, 0);
+
+
+//    blink(500, 5);
+    uint8_t random_data[FLASH_PAGE_SIZE];
+    for (int i = 0; i < FLASH_PAGE_SIZE; ++i)
+        random_data[i] = rand() >> 16;
+
+    uart_puts(UART_ID, "Generated data\r\n");
+
+    flash_range_erase(FLASH_TARGET_OFFSET, FLASH_SECTOR_SIZE); //Erases 4096 bytes at a time
+
+    uart_puts(UART_ID, "Erased flash\r\n");
+
+    flash_range_program(FLASH_TARGET_OFFSET, random_data, FLASH_PAGE_SIZE);
+
+    uart_puts(UART_ID, "Programmed flash\r\n");
 
     bool mismatch = false;
     for (int i = 0; i < FLASH_PAGE_SIZE; ++i)
@@ -92,5 +98,6 @@ void blink(const int delay, const int n)
 void wait(const int pin) {
     while (!gpio_get(pin)) {
         uart_puts(UART_ID, "waiting...\n\r");
+        sleep_ms(500);
     }
 }
