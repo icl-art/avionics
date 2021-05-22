@@ -12,7 +12,7 @@ class TestStorage(unittest.TestCase):
         for _ in range(4):
             st.write([1.0, 2.0])
         file.write.assert_not_called()
-
+ 
     def test_data_dumped_on_full(self):
         file = Mock()
         st = storage(5*8, file)

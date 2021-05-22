@@ -1,5 +1,6 @@
 # <ins>Astra</ins>
 
+![tests](https://github.com/icl-art/avionics/actions/workflows/tests.yml/badge.svg)
 ---
 
 This document explains the design of the Astra Avionics System (AAS), as well as the associated testing and launch procedures.
