@@ -101,7 +101,9 @@ while magnitude < 16:
     #print(magnitude)
 
 print("Launch detected, dumping buffer")
-log.dump(rb)
+for reading in rb:
+    log.write(reading)
+
 for val in rb:
     print(val)
 
