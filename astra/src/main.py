@@ -1,8 +1,7 @@
 import utime
-from machine import I2C, Pin
+from machine import Pin
 
 from .serialisation import storage, RING, NORMAL
-from .ring_buffer import RingBuffer
 from .state_machine import state, state_machine
 from .sensors import sensors
 
