@@ -6,7 +6,7 @@ class state:
     def run(self) -> int:
         pass
 class state_machine:
-    def __init__(self, states: state, start_state = 0, sequential=True):
+    def __init__(self, states: list[state], start_state = 0, sequential=True):
         if len(states) == 0:
             raise UserWarning("State machine created with 0 states")
         if len(states) < start_state < 0:

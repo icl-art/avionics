@@ -1,5 +1,5 @@
 import utime
-from machine import I2C, Pin, PWM
+from machine import I2C, Pin
 from MPL3115A2 import MPL3115A2 as mpl
 import MPU6050
 import serialisation
@@ -25,6 +25,7 @@ while check.value():
     print("Waiting")
     utime.sleep(1)
     led.toggle()
+
 
 print("Initialising Sensors")
 

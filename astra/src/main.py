@@ -10,6 +10,7 @@ from .sensors import sensors
 
 CAPTURE_RATE = 20
 MILLIS = 1000
+STORAGE_BUFFER_SIZE = 256
 
 led = Pin(25, Pin.OUT)
 def indicate(msg):
@@ -75,3 +76,17 @@ class postflight(state):
         while True:
             indicate("Awaiting recovery")
             utime.sleep(1)
+
+sens = sensors(indicate=indicate)
+log = serialisation.storage(256, "log.bin")
+
+machine = state_machine([
+    idle(),
+    preflight(log, sens),
+    flight(log, sens),
+    postflight()
+])
+
+utime.sleep(2)
+
+machine.run()
