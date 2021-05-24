@@ -142,7 +142,7 @@ Luckily it seems that the rocket launched soon after the incorrect detection, so
 
 * Writing to flash is much slower than writing to RAM, so we actually store the data in a buffer in RAM, and periodically flush it to flash.
 
-* The RP2040 has Programmable IO and a DMA controller which means that the each sensor can write to the RAM buffer in parallel with other sensors.
+* The RP2040 has Programmable IO and a DMA controller which means that the each sensor can write to the RAM buffer in parallel with other sensors. (Note this may need custom drivers for the sensors)
 
 * The RP2040 has 2 cores, so we use 2 buffers, Buf 0 is used by Core 0, to write records into, and Buf 1 is written into flash by Core 1. When Buf 0 is full and Core 1 is finished, the buffers are swapped.
   
