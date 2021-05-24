@@ -22,7 +22,7 @@ class state_machine:
     def run(self):
         state = self.states[self.start_state]
         curr = self.start_state
-        while 1:
+        while True:
             next_state = state.run()
             if next_state != CONTINUE:
                 if next_state in self.transition_table.get(curr):

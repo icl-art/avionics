@@ -4,11 +4,10 @@ from MPL3115A2 import MPL3115A2 as mpl
 import MPU6050
 
 class sensors:
-
     _data = [float()] * 9
     _start = utime.ticks_ms()
 
-    def __init__(self, indicate=(lambda: ...)):
+    def __init__(self, indicate=(lambda x: ...)):
         self._indicate = indicate
 
         #initialise MPL3115A2
@@ -22,7 +21,7 @@ class sensors:
 
         #self calibrate hardware
         for _ in range(200):
-            self._indicate()
+            self._indicate(None)
             self.get()
             utime.sleep(3)
     
