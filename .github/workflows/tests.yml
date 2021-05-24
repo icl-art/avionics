@@ -44,6 +44,5 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Test Astra
       run: |
-        python -m unittest tests.test_storage
-        python -m unittest tests.test_ring_buffer
+        for test in $(ls tests | grep -E "(.py)$" | cut -f 1 -d '.'); do python3 -m unittest tests.$test; done
       working-directory: ${{env.working-directory}}
