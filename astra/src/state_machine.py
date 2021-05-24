@@ -1,10 +1,10 @@
 CONTINUE = -1
 
+from abc import abstractmethod
 class state:
-    
-    def run(self):
-        return CONTINUE
-
+    @abstractmethod
+    def run(self) -> int:
+        pass
 class state_machine:
     def __init__(self, states: state, start_state = 0, sequential=True):
         if len(states) == 0:
