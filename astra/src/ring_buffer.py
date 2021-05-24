@@ -1,5 +1,6 @@
 #This file implements a ringbuffer that should store the readings for the first n seconds
 
+raise PendingDeprecationWarning("RingBuffer may be deprecated soon, as storage does similar stuff")
 class RingBuffer:    
 
     def __init__(self, max_size, frame_size):
