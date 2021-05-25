@@ -2,7 +2,7 @@ import utime
 from machine import Pin
 
 from .serialisation import storage, RING, NORMAL
-from .state_machine import state, run
+from .state_machine import state
 from .sensors import sensors
 
 CAPTURE_RATE = 20
@@ -43,7 +43,7 @@ class preflight(state):
         while magnitude < self.ACCEL_THRESH:
             indicate(None)
             data = self.sensors.get()
-            x, y, z = data[3], data[4], data[5]
+            x, y, z = data[3], data[4], data[5] #This isn't great - since preflight should not know the data format
             magnitude = x*x + y*y + z*z
             self.buffer.write(data)
             utime.sleep_ms(self.DELAY)
