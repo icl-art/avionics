@@ -3,7 +3,6 @@ import unittest
 from unittest.mock import Mock
 from random import random
 import timeout_decorator
-import sys
 import io
 
 from src.state_machine import preflight, flight, postflight
