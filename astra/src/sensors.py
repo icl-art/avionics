@@ -7,9 +7,7 @@ class sensors:
     _data = [float()] * 9
     _start = utime.ticks_ms()
 
-    def __init__(self, indicate=(lambda x: ...)):
-        self._indicate = indicate
-
+    def __init__(self):
         #initialise MPL3115A2
         baro_i2c = I2C(1, scl=Pin(19), sda=Pin(18))
         self._baro = mpl(baro_i2c, mode=mpl.PRESSURE)
@@ -21,7 +19,6 @@ class sensors:
 
         #self calibrate hardware
         for _ in range(200):
-            self._indicate(None)
             self.get()
             utime.sleep(3)
     
