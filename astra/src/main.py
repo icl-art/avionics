@@ -1,6 +1,6 @@
-import utime
+from .external import utime
 
-from .serialisation import storage, RING, NORMAL
+from .serialisation import storage
 from .state_machine import state, idle
 from .sensors import sensors
 

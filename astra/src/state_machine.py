@@ -1,22 +1,7 @@
 from abc import abstractmethod
 from .serialisation import RING, NORMAL
 
-try:
-    import utime
-    from machine import Pin
-except ImportError:
-    class utime:
-        def sleep_ms(self):
-            pass
-        def sleep(self):
-            pass
-    class Pin:
-        IN = 0
-        OUT = 0
-        def __init__(self, *_):
-            pass
-        def toggle(self):
-            pass
+from .external import utime, Pin
 
 class state:
     @abstractmethod

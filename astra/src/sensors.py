@@ -1,7 +1,7 @@
-import utime
-from machine import I2C, Pin
-from MPL3115A2 import MPL3115A2 as mpl
-import MPU6050
+from .external import utime
+from .external import I2C, Pin
+from .external import MPL3115A2 as mpl
+from .external import MPU6050
 
 class sensors:
     _data = [float()] * 9
