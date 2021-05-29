@@ -45,5 +45,5 @@ jobs:
     - name: Test Astra
       run: |
         if [ -f ../requirements.txt ]; then pip install -r ../requirements.txt; fi
-        for test in $(ls tests | grep -E "(.py)$" | cut -f 1 -d '.'); do python3 -m unittest tests.$test; done
+        sh tools/test.sh
       working-directory: ${{env.working-directory}}
