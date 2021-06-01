@@ -1,4 +1,5 @@
 import struct
+import _thread
 
 _FLOAT_SIZE = 4
 
@@ -15,11 +16,15 @@ class storage:
         self.file = file
         self.write = self._write_normal
 
+        self.reserve_buffer = bytearray(max_buffer_size)
+        self.flush_sema = _thread.allocate_lock()
+        _thread.start_new_thread(self.thread_1)
+
     #Readings is a tuple of the readings
     #Note a max_buffer_size must be divisible by the size of the readings
     def _write_normal(self, readings):
         if self.buffer_size >= self.max_buffer_size:
-            self.flush()
+            self.flush_async()
         
         for val in readings:
             self.buffer[self.buffer_size:] = struct.pack("f", val)
@@ -34,9 +39,22 @@ class storage:
 
     def flush(self):
         self.file.write(self.buffer)
-        self.buffer = bytearray(self.max_buffer_size)
         self.buffer_size = 0
         
+    def flush_async(self):
+        self.buffer, self.reserve_buffer = self.reserve_buffer, self.buffer
+        self.buffer_size = 0
+        if self.flush_sema.locked():
+            self.flush_sema.release()
+        else:
+            print("Strange race condition")
+
+    def thread_1(self):
+        while True:
+            self.flush_sema.acquire()
+            self.file.write(self.reserve_buffer)
+            
+
     def close(self):
         self.flush()
         del self.buffer
