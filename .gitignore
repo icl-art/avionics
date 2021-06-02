@@ -1,3 +1,4 @@
 *.pyc
 astra/out.csv
 *.asv
+experimental/build/*
