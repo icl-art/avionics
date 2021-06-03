@@ -12,6 +12,6 @@ log = storage(STORAGE_BUFFER_SIZE, RING_BUFFER_SIZE, "log.bin")
 
 utime.sleep(2)
 
-state = idle()
+state = idle(log, sens)
 while state:
     state = state.run()

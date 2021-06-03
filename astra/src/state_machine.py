@@ -23,7 +23,7 @@ class idle(state):
         self.buffer = buffer
         self.sensors = sensors
 
-    def run(self) -> int:
+    def run(self) -> state:
         check = Pin(22, Pin.IN, Pin.PULL_UP)
 
         while check.value():
@@ -40,7 +40,7 @@ class preflight(state):
         self.buffer = buffer
         self.sensors = sensors
 
-    def run(self) -> int:
+    def run(self) -> state:
         self.buffer.set_mode(RING)
         magnitude = 0
         while magnitude < self.ACCEL_THRESH:
@@ -60,12 +60,12 @@ class flight(state):
         self.buffer = buffer
         self.sensors = sensors
 
-    def run(self) -> int:
+    def run(self) -> state:
         self.buffer.set_mode(NORMAL)
         #TODO: Work out when to stop recording
         while True:
             try:
-                indicate()
+                indicate(None)
                 data = self.sensors.get()
                 self.buffer.write(data)
                 utime.sleep_ms(self.DELAY)
