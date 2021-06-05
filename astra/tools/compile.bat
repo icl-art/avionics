@@ -21,9 +21,6 @@ mpy-cross -O[4] -march=armv7m sensors.py
 ECHO Compiling State Machine
 mpy-cross -O[4] -march=armv7m state_machine.py
 
-ECHO Compiling Main
-mpy-cross -O[4] -march=armv7m main.py
-
 REM ECHO Compiling copy
 REM mpy-cross -O[4] -march=armv7m copy.py
 

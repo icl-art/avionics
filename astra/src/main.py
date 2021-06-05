@@ -1,8 +1,8 @@
-from .external import sleep
+from external import sleep
 
-from .serialisation import storage
-from .state_machine import state, idle
-from .sensors import sensors
+from serialisation import storage
+from state_machine import state, idle
+from sensors import sensors
 
 STORAGE_BUFFER_SIZE = 256
 RING_BUFFER_SIZE = 80

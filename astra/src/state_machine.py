@@ -1,10 +1,10 @@
-from abc import abstractmethod
-from .serialisation import RING, NORMAL
+# from abc import abstractmethod
+from serialisation import RING, NORMAL
 
-from .external import utime, Pin
+from external import utime, Pin
 
 class state:
-    @abstractmethod
+    # @abstractmethod
     def run(self):
         pass
 
@@ -24,7 +24,7 @@ class idle(state):
         self.sensors = sensors
 
     def run(self) -> state:
-        check = Pin(22, Pin.IN, Pin.PULL_UP)
+        check = Pin(4, Pin.IN, Pin.PULL_UP)
 
         while check.value():
             utime.sleep(1)
@@ -44,9 +44,9 @@ class preflight(state):
         self.buffer.set_mode(RING)
         magnitude = 0
         while magnitude < self.ACCEL_THRESH:
-            indicate(None)
             data = self.sensors.get()
             x, y, z = data[3], data[4], data[5] #This isn't great - since preflight should not know the data format
+            indicate("preflight mode {} {} {}".format(x, y, z))
             magnitude = x*x + y*y + z*z
             self.buffer.write(data)
             utime.sleep_ms(self.DELAY)

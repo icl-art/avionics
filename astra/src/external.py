@@ -18,6 +18,6 @@ if TEST_MODE:
     Pin.OUT = 0
 else:
     from utime import *
-    from .MPL3115A2 import *
-    from .MPU6050 import *
+    from MPL3115A2 import *
+    from MPU6050 import *
     from machine import I2C, Pin

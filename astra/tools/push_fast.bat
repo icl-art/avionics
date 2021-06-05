@@ -8,7 +8,9 @@ echo | call compile.bat
 
 cd ../src
 
-mpfshell -o COM3 -n -c "ls; put main.py main.py; mput.*\.mpy; ls; exit"
+mpfshell -o COM7 -n -c "ls; put main.py main.py; mput.*\.mpy; ls; exit"
+
+cd ../tools
 
 ECHO Done
 

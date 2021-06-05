@@ -20,7 +20,7 @@ class storage:
         self.buffer_lock = _thread.allocate_lock()
         self.flush_sema = _thread.allocate_lock()
         self.flush_sema.acquire()
-        _thread.start_new_thread(self.thread_1)
+        _thread.start_new_thread(self.thread_1, ())
 
     #Readings is a tuple of the readings
     #Note a max_buffer_size must be divisible by the size of the readings
@@ -61,7 +61,7 @@ class storage:
         del self.buffer
         self.file.close()
 
-    def set_mode(self, mode: NORMAL | RING):
+    def set_mode(self, mode):
         if mode == NORMAL:
             self.write = self._write_normal
         elif mode == RING:

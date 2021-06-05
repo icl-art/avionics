@@ -1,7 +1,7 @@
-from .external import utime
-from .external import I2C, Pin
-from .external import MPL3115A2 as mpl
-from .external import MPU6050
+from external import utime
+from external import I2C, Pin
+from external import MPL3115A2 as mpl
+from external import MPU6050
 
 class sensors:
     _data = [float()] * 9
@@ -9,18 +9,21 @@ class sensors:
 
     def __init__(self):
         #initialise MPL3115A2
-        baro_i2c = I2C(1, scl=Pin(19), sda=Pin(18))
+        baro_i2c = I2C(1, scl=Pin(3), sda=Pin(2))
         self._baro = mpl(baro_i2c, mode=mpl.PRESSURE)
 
         # initialise MPU6050
-        self._mpu = MPU6050.MPU6050(bus = 0, scl = Pin(17), sda = Pin(16))
+        self._mpu = MPU6050(bus = 1, scl = Pin(3), sda = Pin(2))
         self._mpu.set_accel_range(16)
         self._mpu.set_gyro_range(500)
+
+        led = Pin(25, Pin.OUT)
 
         #self calibrate hardware
         for _ in range(200):
             self.get()
-            utime.sleep(3)
+            led.toggle()
+            utime.sleep_ms(3)
     
 
     def get(self) -> list[float]:
