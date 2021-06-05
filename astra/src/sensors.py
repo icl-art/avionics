@@ -23,7 +23,7 @@ class sensors:
         for _ in range(200):
             self.get()
             led.toggle()
-            utime.sleep_ms(3)
+            utime.sleep(3)
     
 
     def get(self) -> list[float]:

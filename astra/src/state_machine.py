@@ -2,6 +2,7 @@
 from serialisation import RING, NORMAL
 
 from external import utime, Pin
+from buzzer import playtone
 
 class state:
     # @abstractmethod
@@ -46,7 +47,7 @@ class preflight(state):
         while magnitude < self.ACCEL_THRESH:
             data = self.sensors.get()
             x, y, z = data[3], data[4], data[5] #This isn't great - since preflight should not know the data format
-            indicate("preflight mode {} {} {}".format(x, y, z))
+            indicate("preflight mode {}".format(data))
             magnitude = x*x + y*y + z*z
             self.buffer.write(data)
             utime.sleep_ms(self.DELAY)
@@ -72,6 +73,7 @@ class flight(state):
             except:
                 break
         indicate("Flight done")
+        playtone(659)
         return postflight()
 
 class postflight(state):

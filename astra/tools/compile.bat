@@ -18,6 +18,9 @@ mpy-cross -O[4] -march=armv7m external.py
 ECHO Compiling Sensors
 mpy-cross -O[4] -march=armv7m sensors.py
 
+ECHO Compiling Buzzer
+mpy-cross -O[4] -march=armv7m buzzer.py
+
 ECHO Compiling State Machine
 mpy-cross -O[4] -march=armv7m state_machine.py
 

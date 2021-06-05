@@ -20,4 +20,4 @@ else:
     from utime import *
     from MPL3115A2 import *
     from MPU6050 import *
-    from machine import I2C, Pin
+    from machine import I2C, Pin, PWM
