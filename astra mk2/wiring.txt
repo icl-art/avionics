@@ -1,0 +1,4 @@
+SCL - gp2 (I2C 1)
+SDA - gp 3 (I2C 1)
+buzzer - gp5
+write - gp4
