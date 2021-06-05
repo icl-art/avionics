@@ -6,7 +6,9 @@ ECHO Compiling libs
 
 echo | call compile.bat
 
-mpfshell -o COM5 -n -c "ls; put datacap.py main.py; mput.*\.mpy; ls; exit"
+cd ../src
+
+mpfshell -o COM3 -n -c "ls; put main.py main.py; mput.*\.mpy; ls; exit"
 
 ECHO Done
 
