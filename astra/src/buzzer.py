@@ -1,10 +1,15 @@
 from machine import Pin, PWM
 
-buzzer = PWM(Pin(5))
+class Buzzer:
 
-def playtone(frequency):
-    buzzer.duty_u16(1000)
-    buzzer.freq(frequency)
+    def __init__(self, pin = 5):
+        self.buzzer = PWM(Pin(5))
+        self.state = False
 
+    def _playtone(self, frequency):
+        self.buzzer.freq(frequency)
 
-tones = [1000, 2000, 4000]
+    def toggle(self, frequency = NOTE_C5):
+        tones = [0, frequency]
+        self.state = not self.state
+        self._playtone(self, tones[self.state])
