@@ -15,21 +15,3 @@
 # state = idle(log, sens)
 # while state:
 #     state = state.run()
-
-from machine import Pin, PWM
-from utime import sleep
-
-buzzer = PWM(Pin(5))
-
-buzzer.duty_u16(1000)
-
-def playtone(frequency):
-    buzzer.freq(frequency)
-    # buzzer.deinit()
-
-
-while True:
-    playtone(1000)
-    sleep(1)
-    playtone(2000)
-    sleep(1)

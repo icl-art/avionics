@@ -35,11 +35,11 @@ def convert(raw: str):
     notes = [note_defs.get(i, i) for i in notes.split(",")]
     notes = list(map(int, notes))
     notes = [struct.pack("Hb", notes[i], notes[i+1]) for i in range(0, len(notes), 2)]
-    buf = bytearray()
+    buf = bytearray(struct.pack("b", tempo))
 
     for note in notes:
         buf += note
-    return (buf, tempo)
+    return buf
     
 
 if __name__ == '__main__':
@@ -48,7 +48,7 @@ if __name__ == '__main__':
         sys.exit(1)
     filename = sys.argv[1]
     with open("raw/"+filename, "r") as file:
-        data, tempo = convert(file.read())
+        data = convert(file.read())
 
     with open("converted/"+filename, "wb") as file:
         file.write(data)
