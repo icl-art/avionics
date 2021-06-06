@@ -60,7 +60,7 @@ class TestStates(unittest.TestCase):
             state.run()
         run_state()
 
-        buffer.set_mode.assert_called_once_with(NORMAL)
+        buffer.set_mode.assert_called_once_with(RING)
 
     
     #Note this is subject to change
