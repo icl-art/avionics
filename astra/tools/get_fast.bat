@@ -2,9 +2,11 @@
 cd /d %~dp0
 TITLE Getting Data
 
-mpfshell -o COM5 -n -c "ls; get log.bin; exit"
+mpfshell -o COM7 -n -c "ls; get log.bin; exit"
 
-python data_read.py -d "%cd%" -i log.bin -o log.csv
+move log.bin ../bin/log.bin
+
+python data_read.py -d ../bin -i log.bin -o log.csv
 
 ECHO Processing Data
 copy /V /Y /Z log.csv ..\data_processing\astra.csv
