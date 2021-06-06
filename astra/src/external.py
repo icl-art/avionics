@@ -8,6 +8,7 @@ if TEST_MODE:
     from unittest.mock import Mock #Mock objects can do anything
 
     utime = Mock()
+    sleep_ms = Mock()
     PWM = Mock()
     
     MPL3115A2 = Mock()

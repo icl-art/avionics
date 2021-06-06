@@ -1,11 +1,9 @@
-# from abc import abstractmethod
 from serialisation import RING, NORMAL
 
 from external import utime, Pin
 from buzzer import playtone
 
 class state:
-    # @abstractmethod
     def run(self):
         pass
 
