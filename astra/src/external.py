@@ -13,15 +13,16 @@ if TEST_MODE:
     
     MPL3115A2 = Mock()
     MPU6050 = Mock()
-    Buzzer = Mock()
+    buzzer = Mock()
     
     I2C = Mock()
     Pin = Mock()
     Pin.IN = 0
     Pin.OUT = 0
 else:
-    from utime import *
+    import utime
     from MPL3115A2 import *
     from MPU6050 import *
     from machine import I2C, Pin, PWM
     from buzzer import Buzzer
+    buzzer = Buzzer()
