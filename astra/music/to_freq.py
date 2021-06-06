@@ -33,9 +33,9 @@ def convert(raw: str):
     notes = without_comments[without_comments.find("{")+1:without_comments.find("}")]
     notes = notes.replace("\n", "").replace(" ", "")
     notes = [note_defs.get(i, i) for i in notes.split(",")]
-    notes = list(map(int, notes))
+    notes = list(map(int, filter(lambda n: len(n) > 0, notes)))
     notes = [struct.pack("Hb", notes[i], notes[i+1]) for i in range(0, len(notes), 2)]
-    buf = bytearray(struct.pack("b", tempo))
+    buf = bytearray(struct.pack("B", tempo))
 
     for note in notes:
         buf += note
@@ -43,12 +43,10 @@ def convert(raw: str):
     
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print("Expected a filename")
-        sys.exit(1)
-    filename = sys.argv[1]
-    with open("raw/"+filename, "r") as file:
-        data = convert(file.read())
+    from os import listdir
+    for filename in listdir("raw/"):
+        with open("raw/"+filename, "r") as file:
+            data = convert(file.read())
 
-    with open("converted/"+filename, "wb") as file:
-        file.write(data)
+        with open("converted/"+filename, "wb") as file:
+            file.write(data)

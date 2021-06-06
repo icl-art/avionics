@@ -13,7 +13,7 @@ class Buzzer:
         self.buzzer.freq(frequency)
 
     def parse_song(self, data):
-        tempo = struct.unpack_from("b", data, 0)[0]
+        tempo = struct.unpack_from("B", data, 0)[0]
         melody = []
         for i in range(1, len(data), 3):
             note = struct.unpack_from("H", data, i)[0]
