@@ -6,8 +6,6 @@ class Buzzer:
 
     def __init__(self, pin = 5):
         self.buzzer = PWM(Pin(pin))
-        self.buzzer.duty_u16(1000)
-        self.buzzer.freq(1000)
 
     def _playtone(self, frequency):
         self.buzzer.freq(frequency)
@@ -36,7 +34,6 @@ class Buzzer:
                     elif divider < 0:
                         sleeptime = 1.5*(noteduration/abs(divider))
 
-                    print(melody[i])
                     if melody[i] != 0:
                         self._playtone(melody[i])
                     self.buzzer.duty_u16(1000)
