@@ -1,7 +1,6 @@
 from serialisation import RING, NORMAL
 
-from external import utime, Pin
-from buzzer import playtone
+from external import utime, Pin, Buzzer
 
 class state:
     def run(self):
@@ -71,7 +70,6 @@ class flight(state):
             except:
                 break
         indicate("Flight done")
-        playtone(659)
         return postflight()
 
 class postflight(state):

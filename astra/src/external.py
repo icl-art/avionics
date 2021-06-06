@@ -13,6 +13,7 @@ if TEST_MODE:
     
     MPL3115A2 = Mock()
     MPU6050 = Mock()
+    Buzzer = Mock()
     
     I2C = Mock()
     Pin = Mock()
@@ -23,3 +24,4 @@ else:
     from MPL3115A2 import *
     from MPU6050 import *
     from machine import I2C, Pin, PWM
+    from buzzer import Buzzer

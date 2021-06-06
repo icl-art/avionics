@@ -5,6 +5,9 @@ import struct
 
 from src.serialisation import storage, NORMAL, RING
 
+#These 2 lines allow the test to import files from src
+from sys import path
+path[0] += "/src"
 class TestStorage(unittest.TestCase):
 
     def init_normal_buffer(self) -> Tuple[Mock, storage]:
@@ -27,11 +30,14 @@ class TestStorage(unittest.TestCase):
         file.write.assert_not_called()
  
     def test_data_dumped_on_full(self):
-        file, st = self.init_normal_buffer()
+        print("start")
+        _, st = self.init_normal_buffer()
+        st.flush_async = Mock()
+        
         for _ in range(6):
             st.write([1.0, 2.0])
 
-        file.write.assert_called_once()
+        st.flush_async.assert_called_once()
 
     def test_data_dumped_on_close(self):
         file, st = self.init_normal_buffer()

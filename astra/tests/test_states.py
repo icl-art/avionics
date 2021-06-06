@@ -5,8 +5,12 @@ from random import random
 import timeout_decorator
 import io
 
-from src.state_machine import preflight, flight, postflight
-from src.serialisation import RING, NORMAL
+#These 2 lines allow the test to import files from src
+from sys import path
+path[0] += "/src"
+
+from state_machine import preflight, flight, postflight
+from serialisation import RING, NORMAL
 
 class TestStates(unittest.TestCase):
     
@@ -51,7 +55,10 @@ class TestStates(unittest.TestCase):
         state = flight(buffer, sensors)
 
         sensors.get = Mock(return_value = [100]*9)
-        state.run()
+        @timeout_decorator.timeout(0.01)
+        def run_state():
+            state.run()
+        run_state()
 
         buffer.set_mode.assert_called_once_with(NORMAL)
 
