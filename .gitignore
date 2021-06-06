@@ -2,3 +2,4 @@
 astra/out.csv
 *.asv
 experimental/build/*
+*.mpy
