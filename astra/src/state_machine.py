@@ -1,6 +1,7 @@
 from serialisation import RING, NORMAL, storage
 from sensors import sensors
 
+from os import listdir
 from external import utime, Pin, buzzer
 
 class state:
@@ -32,8 +33,12 @@ class idle(state):
             indicate("Waiting")
 
         sensor = sensors()
-        buffer = storage(STORAGE_BUFFER_SIZE*DATA_SIZE, 
-                         RING_BUFFER_SIZE*DATA_SIZE, open("log.bin", "wb"))
+        
+        n_logs = len(list(filter(lambda s: "log" in s, listdir())))
+        if n_logs != 0:
+            buzzer.playsong("miichannel.txt")
+        buffer = storage(STORAGE_BUFFER_SIZE*DATA_SIZE,
+                         RING_BUFFER_SIZE*DATA_SIZE, open("log{}.bin".format(n_logs), "wb"))
         buzzer.playsong("nokia.txt")
         return preflight(buffer, sensor)
     
