@@ -1,17 +1,9 @@
-# from external import sleep
+from external import utime
 
-# from serialisation import storage
-# from state_machine import state, idle
-# from sensors import sensors
+from state_machine import state, idle
 
-# STORAGE_BUFFER_SIZE = 256
-# RING_BUFFER_SIZE = 80
+utime.sleep(2)
 
-# sens = sensors()
-# log = storage(STORAGE_BUFFER_SIZE, RING_BUFFER_SIZE, "log.bin")
-
-# sleep(2)
-
-# state = idle(log, sens)
-# while state:
-#     state = state.run()
+state = idle()
+while state:
+    state = state.run()
