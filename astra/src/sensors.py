@@ -23,10 +23,9 @@ class sensors:
         for _ in range(200):
             self.get()
             led.toggle()
-            utime.sleep(3)
-    
+            utime.sleep_ms(30)
 
-    def get(self) -> list[float]:
+    def get(self):
         pressure = self._baro.pressure()
         temperature = self._baro.temperature()
         motion = self._mpu.read()
