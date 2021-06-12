@@ -10,6 +10,7 @@ if TEST_MODE:
     utime = Mock()
     sleep_ms = Mock()
     PWM = Mock()
+    Timer = Mock()
     
     MPL3115A2 = Mock()
     MPU6050 = Mock()
@@ -23,6 +24,6 @@ else:
     import utime
     from MPL3115A2 import *
     from MPU6050 import *
-    from machine import I2C, Pin, PWM
+    from machine import I2C, Pin, PWM, Timer
     from buzzer import Buzzer
     buzzer = Buzzer()
