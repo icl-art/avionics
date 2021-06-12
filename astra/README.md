@@ -182,3 +182,9 @@ Tests include:
 * The data collected from the sensors is accurate. This could be done by manually triggering a launch event, and moving with the avionics bay.
 
 ## Launch procedures
+1. Power the avionics bay using a LiPo
+2. Place the jumper on the outer 2 pins
+3. Place the bay on a level surface and wait for it to make a sound.
+4. If it plays the Mii Channel Theme -> an old log file is still on the pico, so remove it and restart at 1.Otherwise the Nokia theme should play.
+5. The pico will start recording data in 15 minutes, when the Nokia theme plays again. It will record for 5 minutes before switching to recovery mode.
+6. Recovery mode is indicated by the Mario Theme playing in a loop, it is now safe to unplug the pico and read the data
