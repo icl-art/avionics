@@ -38,6 +38,9 @@ class idle(state):
         if n_logs != 0:
             buzzer.playsong("miichannel.txt")
         buffer = storage(STORAGE_BUFFER_SIZE*DATA_SIZE, 0, open("log{}.bin".format(n_logs), "wb"))
+        buzzer.playsong("takeonme.txt")
+        buzzer.playsong("nokia.txt")
+        buzzer.playsong("nokia.txt")
         buzzer.playsong("nokia.txt")
         utime.sleep(PREFLIGHT_DELAY)
         return flight(buffer, sensor)
@@ -50,6 +53,8 @@ class flight(state):
 
     def run(self) -> state:
         self.buffer.set_mode(NORMAL)
+        buzzer.playsong("nokia.txt")
+        buzzer.playsong("nokia.txt")
         buzzer.playsong("nokia.txt")
         #TODO: Work out when to stop recording
         i = 0
