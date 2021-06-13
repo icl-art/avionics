@@ -23,7 +23,7 @@ class sensors:
         for _ in range(200):
             self.get()
             led.toggle()
-            utime.sleep_ms(30)
+            utime.sleep_ms(600)
 
     def get(self):
         pressure = self._baro.pressure()
