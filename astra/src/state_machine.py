@@ -16,7 +16,7 @@ DATA_SIZE = 9 * 4
 STORAGE_BUFFER_SIZE = 50 * CAPTURE_RATE #50 seconds
 PREFLIGHT_DELAY = 15 * 60 # 15 minutes
 
-FLIGHT_TIME = 5 * 60 * CAPTURE_RATE
+FLIGHT_TIME = 10 * 60 * CAPTURE_RATE
 
 led = Pin(25, Pin.OUT)
 def indicate(msg):
