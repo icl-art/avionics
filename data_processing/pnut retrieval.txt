@@ -1,0 +1,5 @@
+blue --> ground
+yellow --> pin 0 rx
+green --> pin 1 tx
+
+others not connected

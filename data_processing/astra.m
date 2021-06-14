@@ -94,57 +94,57 @@ xlabel('Data Point');
 ylabel('Time Elapsed')
 exportgraphics(gcf, sprintf('%s_recording.png', launch), 'Resolution', 600);
 
-% pnut = importdata(sprintf('%s.pf2', launch), ',', 11).data;
-% 
-% t = pnut(:, 1);
-% altitude = pnut(:, 2)./3.281;
-% vel = pnut(:, 3)./3.281;
-% temp = pnut(:, 4);
-% 
-% figure
-% plot(t, altitude, 'LineWidth', lw, 'Color', col1)
-% hold on
+pnut = importdata(sprintf('%s.pf2', launch), ',', 11).data;
+
+t = pnut(:, 1);
+altitude = pnut(:, 2)./3.281;
+vel = pnut(:, 3)./3.281;
+temp = pnut(:, 4);
+
+figure
+plot(t, altitude, 'LineWidth', lw, 'Color', col1)
+hold on
 % plot(time+0.4,OR_alt, '-.', 'LineWidth', lw, 'Color', col2)
-% hold off
-% title('Altitude AGL - Pnut')
-% legend('PNUT', 'OpenRocket', 'Location', 'best')
-% xlabel('Time(s)')
-% ylabel('Altitude (m)')
-% exportgraphics(gcf, sprintf('%s_altitude_pnut.png', launch), 'Resolution', 600);
-% 
-% period = 35;
-% 
-% smooth_alt = movmean(altitude,period);
-% disp(['Moving average period = ' num2str(period) ', and apogee = ' num2str(max(smooth_alt)) ' m'])
-% 
-% figure
-% hold on
-% plot(t, smooth_alt, 'LineWidth', lw, 'Color', col1)
+hold off
+title('Altitude AGL - Pnut')
+legend('Pnut', 'OpenRocket', 'Location', 'best')
+xlabel('Time(s)')
+ylabel('Altitude (m)')
+exportgraphics(gcf, sprintf('%s_altitude_pnut.png', launch), 'Resolution', 600);
+
+period = 35;
+
+smooth_alt = movmean(altitude,period);
+disp(['Moving average period = ' num2str(period) ', and apogee = ' num2str(max(smooth_alt)) ' m'])
+
+figure
+hold on
+plot(t, smooth_alt, 'LineWidth', lw, 'Color', col1)
 % plot(time+0.4,OR_alt, '-.', 'LineWidth', lw, 'Color', col2)
-% hold off
-% title('Smoothed Altitude AGL - Pnut')
-% legend('PNUT', 'OpenRocket', 'Location', 'best')
-% xlabel('Time(s)')
-% ylabel('Altitude (m)')
-% box on
-% exportgraphics(gcf, sprintf('%s_smoothed_altitude_pnut.png', launch), 'Resolution', 600);
-% 
-% figure
-% plot(t, vel, 'LineWidth', lw, 'Color', col2)
-% hold on
+hold off
+title('Smoothed Altitude AGL - Pnut')
+legend('Pnut', 'OpenRocket', 'Location', 'best')
+xlabel('Time(s)')
+ylabel('Altitude (m)')
+box on
+exportgraphics(gcf, sprintf('%s_smoothed_altitude_pnut.png', launch), 'Resolution', 600);
+
+figure
+plot(t, vel, 'LineWidth', lw, 'Color', col2)
+hold on
 % plot(time, OR_vel, 'LineWidth', lw, 'Color', col3)
-% hold off
-% title('Velocity - Pnut')
-% legend('PNUT', 'OpenRocket', 'Location', 'best')
-% xlabel('Time(s)')
-% ylabel('Velocity (m/s)')
-% exportgraphics(gcf, sprintf('%s_velocity_pnut.png', launch), 'Resolution', 600);
-% 
-% figure
-% plot(t, temp, 'LineWidth', lw, 'Color', col3)
-% title('Temperature - Pnut')
-% xlabel('Time(s)')
-% ylabel('Velocity (m/s)')
-% exportgraphics(gcf, sprintf('%s_temperature_pnut.png', launch), 'Resolution', 600);
-% 
+hold off
+title('Velocity - Pnut')
+legend('Pnut', 'OpenRocket', 'Location', 'best')
+xlabel('Time(s)')
+ylabel('Velocity (m/s)')
+exportgraphics(gcf, sprintf('%s_velocity_pnut.png', launch), 'Resolution', 600);
+
+figure
+plot(t, temp, 'LineWidth', lw, 'Color', col3)
+title('Temperature - Pnut')
+xlabel('Time(s)')
+ylabel('Temperature (C)')
+exportgraphics(gcf, sprintf('%s_temperature_pnut.png', launch), 'Resolution', 600);
+
 
