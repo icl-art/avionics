@@ -34,11 +34,15 @@ t = t/1000;
 % shift t values to recording start
 t = t - min(t);
 
+new_x = -acc_z;
+new_y = acc_y;
+new_z = acc_x;
+
 figure
 hold on
-plot(t, acc_x, 'LineWidth', lw, 'Color', col1)
-plot(t, acc_y, 'LineWidth', lw, 'Color', col2)
-plot(t, acc_z, 'LineWidth', lw, 'Color', col3)
+plot(t, new_x, 'LineWidth', lw, 'Color', col1)
+plot(t, new_y, 'LineWidth', lw, 'Color', col2)
+plot(t, new_z, 'LineWidth', lw, 'Color', col3)
 plot(t, acc_magnitude, 'LineWidth', 1, 'Color', col4)
 % plot(time2, OR_accel, 'c-', 'LineWidth', lw)
 title('Acceleration - Custom');
@@ -48,6 +52,12 @@ legend('x', 'y', 'z', 'Magnitude', 'OpenRocket', 'Location', 'best')
 xlim([275 325])
 % ylim([-80 109])
 exportgraphics(gcf, sprintf('%s_acceleration.png', launch), 'Resolution', 600);
+
+period = 10;
+
+g_x = movmean(g_x,period);
+g_y = movmean(g_y,period);
+g_z = movmean(g_z,period);
 
 figure
 hold on
@@ -70,14 +80,69 @@ ylabel('Pressure (Pa)')
 xlim([275 325])
 exportgraphics(gcf, sprintf('%s_pressure.png', launch), 'Resolution', 600);
 
-height = atmospalt(pressure);
-figure
-plot(t, height, 'LineWidth', lw, 'Color', col2)
-title('Altitude ASL - Custom')
-xlabel('Time(s)')
-ylabel('Altitude (m)')
-xlim([275 325])
-exportgraphics(gcf, sprintf('%s_altitude.png', launch), 'Resolution', 600);
+%%
+inp = input('Run ASTRA MkII Cleaner?');
+
+if inp == true
+    
+    height = atmospalt(pressure);
+    
+    skips = [];
+    
+    for i = 2:length(height);
+        if height(i) == height(i-1)
+            
+            skips(end+1) = i;
+            
+        end
+        
+    end
+    
+    height(skips) = 0;
+    
+    t_filtered = t(height~=0);
+    height  = height(height~=0);
+    height = height - min(height);
+    
+    custom_vel = zeros(length(height),1);
+    
+    for i = 1:length(height)-1
+        
+        custom_vel(i) = (height(i+1)-height(i))/(t_filtered(i+1)-t_filtered(i));
+        
+    end
+    
+    figure
+    plot(t_filtered, height, 'LineWidth', lw, 'Color', col2)
+    title('Altitude ASL - Custom')
+    xlabel('Time(s)')
+    ylabel('Altitude (m)')
+    xlim([275 325])
+    exportgraphics(gcf, sprintf('%s_altitude.png', launch), 'Resolution', 600);
+    
+    figure
+    plot(t_filtered, custom_vel, 'LineWidth', lw, 'Color', col2)
+    title('Velocity - Custom')
+    xlabel('Time(s)')
+    ylabel('Velocity (ms^{-1})')
+    xlim([275 325])
+    exportgraphics(gcf, sprintf('%s_velocity.png', launch), 'Resolution', 600);
+    
+    
+else
+    
+    height = atmospalt(pressure);
+    
+    figure
+    plot(t, height, 'LineWidth', lw, 'Color', col2)
+    title('Altitude ASL - Custom')
+    xlabel('Time(s)')
+    ylabel('Altitude (m)')
+    xlim([275 325])
+    exportgraphics(gcf, sprintf('%s_altitude.png', launch), 'Resolution', 600);
+    
+    
+end
 
 figure
 plot(t, temp, 'LineWidth', lw, 'Color', col3)
@@ -146,5 +211,41 @@ title('Temperature - Pnut')
 xlabel('Time(s)')
 ylabel('Temperature (C)')
 exportgraphics(gcf, sprintf('%s_temperature_pnut.png', launch), 'Resolution', 600);
+
+inp = input('Run ASTRA MkII PNut comparison?');
+
+if inp == true
+    
+    figure
+    hold on
+    plot(t, altitude, 'LineWidth', lw, 'Color', col1)
+    plot(t_filtered-280.3, height-6.2, 'LineWidth', lw, 'Color', col2)
+    % plot(time+0.4,OR_alt, '-.', 'LineWidth', lw, 'Color', col2)
+    hold off
+    title('Altitude AGL')
+    legend('Pnut', 'Custom Bay', 'Location', 'best')
+    xlim([0 50])
+    box on
+    xlabel('Time(s)')
+    ylabel('Altitude (m)')
+    exportgraphics(gcf, sprintf('%s_altitude_combined.png', launch), 'Resolution', 600);
+    
+    figure
+    hold on
+    plot(t, vel, 'LineWidth', lw, 'Color', col1)
+    plot(t_filtered-280.3, custom_vel, 'LineWidth', lw, 'Color', col2)
+    % plot(time+0.4,OR_alt, '-.', 'LineWidth', lw, 'Color', col2)
+    hold off
+    title('Velocity')
+    box on
+    legend('Pnut', 'Custom Bay', 'Location', 'best')
+    xlim([0 50])
+    xlabel('Time(s)')
+    ylabel('Velocity (ms^{-1})')
+    exportgraphics(gcf, sprintf('%s_velocity_combined.png', launch), 'Resolution', 600);
+    
+    
+    
+end
 
 
