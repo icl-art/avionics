@@ -82,7 +82,8 @@ ylabel('Pressure (Pa)')
 xlim([275 325])
 exportgraphics(gcf, sprintf('%s_pressure.png', launch), 'Resolution', 600);
 
-inp = input('Run ASTRA MkII Cleaner?');
+% inp = input('Run ASTRA MkII Cleaner?');
+inp = true;
 
 if inp == true
     
@@ -229,7 +230,9 @@ OR_alt = OR(:,2);
 OR_vel = OR(:,3);
 OR_acc = OR(:,4);
 
-inp = input('Run ASTRA MkII PNut comparison?');
+% inp = input('Run ASTRA MkII PNut comparison?');
+
+inp = true;
 
 if inp == true
     
@@ -292,4 +295,4 @@ if inp == true
     
 end
 
-
+close all
