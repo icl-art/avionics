@@ -80,7 +80,6 @@ ylabel('Pressure (Pa)')
 xlim([275 325])
 exportgraphics(gcf, sprintf('%s_pressure.png', launch), 'Resolution', 600);
 
-%%
 inp = input('Run ASTRA MkII Cleaner?');
 
 if inp == true
@@ -155,6 +154,7 @@ exportgraphics(gcf, sprintf('%s_temperature.png', launch), 'Resolution', 600);
 figure
 plot(t, 'LineWidth', lw, 'Color', col4)
 title('Data Recording - Custom')
+box on
 xlabel('Data Point');
 ylabel('Time Elapsed')
 exportgraphics(gcf, sprintf('%s_recording.png', launch), 'Resolution', 600);
@@ -166,6 +166,8 @@ altitude = pnut(:, 2)./3.281;
 vel = pnut(:, 3)./3.281;
 temp = pnut(:, 4);
 
+altitude(t==12.35) = 531;
+
 figure
 plot(t, altitude, 'LineWidth', lw, 'Color', col1)
 hold on
@@ -174,6 +176,7 @@ hold off
 title('Altitude AGL - Pnut')
 legend('Pnut', 'OpenRocket', 'Location', 'best')
 xlabel('Time(s)')
+box on
 ylabel('Altitude (m)')
 exportgraphics(gcf, sprintf('%s_altitude_pnut.png', launch), 'Resolution', 600);
 
@@ -202,6 +205,7 @@ hold off
 title('Velocity - Pnut')
 legend('Pnut', 'OpenRocket', 'Location', 'best')
 xlabel('Time(s)')
+box on
 ylabel('Velocity (m/s)')
 exportgraphics(gcf, sprintf('%s_velocity_pnut.png', launch), 'Resolution', 600);
 
@@ -210,6 +214,7 @@ plot(t, temp, 'LineWidth', lw, 'Color', col3)
 title('Temperature - Pnut')
 xlabel('Time(s)')
 ylabel('Temperature (C)')
+box on
 exportgraphics(gcf, sprintf('%s_temperature_pnut.png', launch), 'Resolution', 600);
 
 inp = input('Run ASTRA MkII PNut comparison?');
