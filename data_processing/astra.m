@@ -222,7 +222,13 @@ xlabel('Time(s)')
 ylabel('Temperature (C)')
 box on
 exportgraphics(gcf, sprintf('%s_temperature_pnut.png', launch), 'Resolution', 600);
-%%
+
+OR = readmatrix('OR_astra_jun13.csv');
+OR_t = OR(:,1);
+OR_alt = OR(:,2);
+OR_vel = OR(:,3);
+OR_acc = OR(:,4);
+
 inp = input('Run ASTRA MkII PNut comparison?');
 
 if inp == true
@@ -283,9 +289,6 @@ if inp == true
     xlabel('Time(s)')
     ylabel('Velocity (ms^{-1})')    
     exportgraphics(gcf, sprintf('%s_all_combined.png', launch), 'Resolution', 600);
-    
-    
-    
     
 end
 
