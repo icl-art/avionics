@@ -34,9 +34,11 @@ t = t/1000;
 % shift t values to recording start
 t = t - min(t);
 
-new_x = -acc_z;
-new_y = acc_y;
-new_z = acc_x;
+period = 5;
+
+new_x = movmean(-acc_z,period);
+new_y = movmean(acc_y,period);
+new_z = movmean(acc_x,period);
 
 figure
 hold on
@@ -112,7 +114,10 @@ if inp == true
     end
     
     figure
+    hold on
     plot(t_filtered, height, 'LineWidth', lw, 'Color', col2)
+    yline(max(height),'--')
+    hold off
     title('Altitude ASL - Custom')
     xlabel('Time(s)')
     ylabel('Altitude (m)')
@@ -169,8 +174,9 @@ temp = pnut(:, 4);
 altitude(t==12.35) = 531;
 
 figure
-plot(t, altitude, 'LineWidth', lw, 'Color', col1)
 hold on
+plot(t, altitude, 'LineWidth', lw, 'Color', col1)
+yline(max(altitude), '--')
 % plot(time+0.4,OR_alt, '-.', 'LineWidth', lw, 'Color', col2)
 hold off
 title('Altitude AGL - Pnut')
@@ -216,7 +222,7 @@ xlabel('Time(s)')
 ylabel('Temperature (C)')
 box on
 exportgraphics(gcf, sprintf('%s_temperature_pnut.png', launch), 'Resolution', 600);
-
+%%
 inp = input('Run ASTRA MkII PNut comparison?');
 
 if inp == true
@@ -238,7 +244,7 @@ if inp == true
     figure
     hold on
     plot(t, vel, 'LineWidth', lw, 'Color', col1)
-    plot(t_filtered-280.3, custom_vel, 'LineWidth', lw, 'Color', col2)
+    plot(t_filtered-280.3+0.512, custom_vel, 'LineWidth', lw, 'Color', col2)
     % plot(time+0.4,OR_alt, '-.', 'LineWidth', lw, 'Color', col2)
     hold off
     title('Velocity')
@@ -248,6 +254,36 @@ if inp == true
     xlabel('Time(s)')
     ylabel('Velocity (ms^{-1})')
     exportgraphics(gcf, sprintf('%s_velocity_combined.png', launch), 'Resolution', 600);
+    
+    figure
+    tiledlayout(2,1)
+    nexttile
+    hold on
+    plot(t, altitude, '-.', 'LineWidth', lw, 'Color', col1)
+    plot(t_filtered-280.3, height-6.2, 'LineWidth', lw*0.8, 'Color', col2)
+    % plot(time+0.4,OR_alt, '-.', 'LineWidth', lw, 'Color', col2)
+    hold off
+    title('Altitude AGL')
+    legend('Commercial Avionics (Pnut)', 'Custom Avionics', 'Location', 'best')
+    xlim([0 50])
+    box on
+    xlabel('Time(s)')
+    ylabel('Altitude (m)')
+    
+    nexttile
+    hold on
+    plot(t, vel, '-.', 'LineWidth', lw, 'Color', col1)
+    plot(t_filtered-280.3+0.512, custom_vel,'LineWidth', lw*0.8, 'Color', col2)
+    % plot(time+0.4,OR_alt, '-.', 'LineWidth', lw, 'Color', col2)
+    hold off
+    title('Velocity')
+    box on
+    legend('Commercial Avionics (Pnut)', 'Custom Avionics', 'Location', 'best')
+    xlim([0 50])
+    xlabel('Time(s)')
+    ylabel('Velocity (ms^{-1})')    
+    exportgraphics(gcf, sprintf('%s_all_combined.png', launch), 'Resolution', 600);
+    
     
     
     
