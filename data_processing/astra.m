@@ -36,9 +36,13 @@ t = t - min(t);
 
 period = 5;
 
-new_x = movmean(-acc_z,period);
-new_y = movmean(acc_y,period);
-new_z = movmean(acc_x,period);
+% new_x = movmean(-acc_z,period);
+% new_y = movmean(acc_y,period);
+% new_z = movmean(acc_x,period);
+
+new_x = movmean(acc_x, period);
+new_y = movmean(acc_y, period);
+new_z = movmean(acc_z, period);
 
 figure
 hold on
