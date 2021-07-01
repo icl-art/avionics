@@ -75,8 +75,8 @@ title('Angular Velocity - Custom');
 xlabel('Time (s)')
 ylabel('Rotation (deg/s)')
 legend('x', 'y', 'z', 'OpenRocket', 'Location', 'best')
-xlim([275 325])
-exportgraphics(gcf, sprintf('%s_rotation.png', launch), 'Resolution', 600);
+% xlim([275 325])
+% exportgraphics(gcf, sprintf('%s_rotation.png', launch), 'Resolution', 600);
 
 figure
 plot(t, pressure, 'LineWidth', lw, 'Color', col1)
@@ -299,4 +299,4 @@ if inp == true
     
 end
 
-close all
+% close all
