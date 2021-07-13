@@ -5,3 +5,4 @@ experimental/build/*
 astra/src/
 *.b#*
 *.s#*
+phone.number
