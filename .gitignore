@@ -3,3 +3,5 @@ astra/out.csv
 *.asv
 experimental/build/*
 astra/src/
+*.b#*
+*.s#*
